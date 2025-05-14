@@ -1,4 +1,4 @@
-# SrcProject
+# DeMisManosGUI
 
 Solución ASP.NET Web API
 Net 9.0
@@ -31,3 +31,26 @@ git config user.email "carloscarmona0829@gmail.com"
 Comandos para verificar user.name y user.email
 git config user.name
 git config user.email
+
+**********************************************************************************************************************************************
+- Para correr este proyecto se debe:
+	* Verificar que se tengan instalados estos paquetes para que funcione Identity
+		Install-Package Microsoft.AspNetCore.Identity.EntityFrameworkCore
+		Install-Package Microsoft.EntityFrameworkCore.Tools
+		Install-Package Microsoft.EntityFrameworkCore.SqlServer
+	* Verificar que exista la carpeta Configuration con la clase del contexto (ApplicationDbContext.cs)
+	* Verificar que en Program.cs estén todas las configuraciones de identity y del contexto (ConnectionStrings debe ser igual en Program.cs y en appsettings.json)
+	* Restaurar la base de datos si es que se sacó antes un backup.
+	* En la tabla NetUsers hay un usuario carloscarmona0829@gmail.com con clave 123456
+	* Ajustar la cadena de conexión.
+
+- Si se quiere iniciar una base de datos nueva desde cero se debe:
+	* Abrir la consola del administrador de paquetes de Visual Studio(ver/otras ventanas/consola del administrador de paquetes).
+	* Eliminar la migración que hay en el proyecto con el comando remove-migration.
+
+- En caso de que no funcione la eliminación con el anterior comando se debe:
+	* Eliminar completa la Carpeta Migrations.
+	* Se deben correr los siguientes comandos 
+	  add-migration initial-migration
+	  update-database
+

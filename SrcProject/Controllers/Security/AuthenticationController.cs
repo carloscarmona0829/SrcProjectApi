@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SrcProject.Models.InModels;
+using SrcProject.Models.InModels.Security;
 using SrcProject.Services.Contract;
 using SrcProject.Utilities;
 
@@ -18,6 +19,25 @@ namespace SrcProject.Controllers.Security
         public AuthenticationController(IAuthentication_Service authService)
         {
             _authService = authService;
+        }
+
+        [HttpPost("Register")]
+        [AllowAnonymous]
+
+        public async Task<IActionResult> RegisterAsync([FromBody] RegisterModelIM registerModelIM)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _authService.RegisterAsync(registerModelIM);
+
+                if (result.IsSuccess)
+                    //Aquí debo crear el tercero relacionando las tablas con el campo UserName
+                    return Ok(result); // Status Code: 200 
+
+                return BadRequest(result);
+            }
+
+            return BadRequest("Algunas propiedades no son válidas."); // Status code: 400
         }
 
         [HttpPost("Login")]

@@ -26,7 +26,7 @@ namespace SrcProject.Services.Implement
 
             try
             {
-                using (var cnn = new SqlConnection(_configuration["ConnectionStrings:cnnDbDeMisManos"]))
+                using (var cnn = new SqlConnection(_configuration["ConnectionStrings:cnn"]))
                 {
                     cnn.Open();
                     string sqlQuery = "SELECT intPartnerId, strDescription FROM tbl_Pwa_Sec_Partners WHERE bitState = 1 ORDER BY intOrder ASC";
@@ -59,7 +59,7 @@ namespace SrcProject.Services.Implement
         {
             try
             {
-                using (var cnn = new SqlConnection(_configuration["ConnectionStrings:cnnDbDeMisManos"]))
+                using (var cnn = new SqlConnection(_configuration["ConnectionStrings:cnn"]))
                 {
                     cnn.Open();
                     SqlCommand cmd = new SqlCommand("sp_Pwa_Sec_AddExternalUser", cnn);
@@ -90,7 +90,7 @@ namespace SrcProject.Services.Implement
 
             try
             {
-                using (var cnn = new SqlConnection(_configuration["ConnectionStrings:cnnDbDeMisManos"]))
+                using (var cnn = new SqlConnection(_configuration["ConnectionStrings:cnn"]))
                 {
                     cnn.Open();
                     SqlCommand cmd = new SqlCommand("sp_Pwa_Sec_GetPermissionsByUserByRoute", cnn);
@@ -127,7 +127,7 @@ namespace SrcProject.Services.Implement
         {
             try
             {
-                using (var cnn = new SqlConnection(_configuration["ConnectionStrings:cnnDbDeMisManos"]))
+                using (var cnn = new SqlConnection(_configuration["ConnectionStrings:cnn"]))
                 {
                     cnn.Open();
                     SqlCommand cmd = new SqlCommand("sp_Pwa_Sec_AddPermissionsByUser", cnn);
@@ -152,7 +152,7 @@ namespace SrcProject.Services.Implement
         {
             try
             {
-                using (var cnn = new SqlConnection(_configuration["ConnectionStrings:cnnDbDeMisManos"]))
+                using (var cnn = new SqlConnection(_configuration["ConnectionStrings:cnn"]))
                 {
                     cnn.Open();
                     SqlCommand cmd = new SqlCommand("sp_Pwa_Sec_DeletePermissionsByUser", cnn);
@@ -179,7 +179,7 @@ namespace SrcProject.Services.Implement
 
             try
             {
-                using (var cnn = new SqlConnection(_configuration["ConnectionStrings:cnnDbDeMisManos"]))
+                using (var cnn = new SqlConnection(_configuration["ConnectionStrings:cnn"]))
                 {
                     cnn.Open();
                     string sqlQuery = "SELECT intRouteId, strRouteName FROM tbl_Pwa_Sec_Routes WHERE bitActive = 1";
@@ -214,7 +214,7 @@ namespace SrcProject.Services.Implement
 
             try
             {
-                using (var cnn = new SqlConnection(_configuration["ConnectionStrings:cnnDbDeMisManos"]))
+                using (var cnn = new SqlConnection(_configuration["ConnectionStrings:cnn"]))
                 {
                     cnn.Open();
                     string sqlQuery = "SELECT strDni, strName + ' ' + strLastName AS strFullName, strEmail FROM tbl_Pwa_Sec_ExternalUsers WHERE bitState = 1 ORDER BY strName ASC";
