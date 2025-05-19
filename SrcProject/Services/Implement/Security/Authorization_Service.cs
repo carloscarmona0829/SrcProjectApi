@@ -2,12 +2,12 @@
 using Microsoft.Data.SqlClient;
 using SrcProject.Models.InModels;
 using SrcProject.Models.OutModels;
-using SrcProject.Services.Contract;
+using SrcProject.Services.Contract.Security;
 using SrcProject.Utilities;
 using System.Data;
 using System.Security;
 
-namespace SrcProject.Services.Implement
+namespace SrcProject.Services.Implement.Security
 {
     public class Authorization_Service : IAuthorization_Service
     {

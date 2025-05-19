@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using SrcProject.Models;
+using SrcProject.Models.Security;
 
 namespace SrcProject.Configuration
 {

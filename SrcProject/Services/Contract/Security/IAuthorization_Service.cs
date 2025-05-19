@@ -2,7 +2,7 @@
 using SrcProject.Models.OutModels;
 using System.Security;
 
-namespace SrcProject.Services.Contract
+namespace SrcProject.Services.Contract.Security
 {
     public interface IAuthorization_Service
     {

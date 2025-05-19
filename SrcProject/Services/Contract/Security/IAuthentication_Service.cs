@@ -3,7 +3,7 @@ using SrcProject.Models.InModels.Security;
 using SrcProject.Models.OutModels;
 using SrcProject.Utilities;
 
-namespace SrcProject.Services.Contract
+namespace SrcProject.Services.Contract.Security
 {
     public interface IAuthentication_Service
     {

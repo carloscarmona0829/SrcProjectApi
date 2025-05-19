@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SrcProject.Models.InModels;
 using SrcProject.Models.InModels.Security;
-using SrcProject.Services.Contract;
+using SrcProject.Services.Contract.Security;
 using SrcProject.Utilities;
 
 namespace SrcProject.Controllers.Security

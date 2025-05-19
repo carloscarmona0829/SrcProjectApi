@@ -1,16 +1,16 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Data.SqlClient;
-using SrcProject.Models;
 using SrcProject.Models.InModels;
 using SrcProject.Models.InModels.Security;
 using SrcProject.Models.OutModels;
-using SrcProject.Services.Contract;
+using SrcProject.Models.Security;
+using SrcProject.Services.Contract.Security;
 using SrcProject.Utilities;
 using System.Data;
 using System.Text;
 
-namespace SrcProject.Services.Implement
+namespace SrcProject.Services.Implement.Security
 {
     public class Authentication_Service : IAuthentication_Service
     {
