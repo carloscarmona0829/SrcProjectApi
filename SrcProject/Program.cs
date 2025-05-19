@@ -2,9 +2,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Web;
 using Microsoft.IdentityModel.Tokens;
 using SrcProject.Configuration;
+using SrcProject.Models;
 using SrcProject.Services.Contract;
 using SrcProject.Services.Implement;
 using SrcProject.Utilities;
@@ -22,10 +22,11 @@ builder.Services.AddSwaggerGen();
 
 //Configuracion EF Core con SqlServer
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-options.UseSqlServer(builder.Configuration["ConnectionStrings:cnn"]));
+options.UseSqlServer(builder.Configuration.GetConnectionString("cnn")));
+//options.UseSqlServer(builder.Configuration["ConnectionStrings:cnn"]));
 
 //Configuración de Identity 
-builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+builder.Services.AddIdentity<ApplicationUserModel, IdentityRole>(options =>
 {
     // User settings
     options.User.RequireUniqueEmail = true;
@@ -80,9 +81,9 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true
     };
 })
+    // Configuración de OpenIdConnect - Domain Azure Connection
 .AddOpenIdConnect("OpenIdConnect", options =>
 {
-    // Configuración de OpenIdConnect
     options.ClientId = builder.Configuration["AzureAd:ClientId"];
     options.ClientSecret = builder.Configuration["AzureAd:ClientSecret"];
     options.Authority = $"{builder.Configuration["AzureAd:Instance"]}{builder.Configuration["AzureAd:TenantId"]}";
@@ -107,15 +108,15 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-// Configuración de Cookies
+//Configuración de Cookies - Domain Azure Connection
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.Cookie.HttpOnly = true;
-    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-    options.Cookie.SameSite = SameSiteMode.None;
-    options.Cookie.Name = ".AspNetCore.Cookies";
-    options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
-    options.SlidingExpiration = true;
+options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+options.Cookie.SameSite = SameSiteMode.None;
+options.Cookie.Name = ".AspNetCore.Cookies";
+options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+options.SlidingExpiration = true;
 });
 
 // Configuración de Cors
@@ -147,7 +148,7 @@ app.UseCors();
 
 app.UseHttpsRedirection();
 
-app.UseAuthentication(); // Asegúrate de agregar esto antes de UseAuthorization
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

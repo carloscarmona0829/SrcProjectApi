@@ -53,7 +53,7 @@ namespace SrcProject.Controllers.Security
                     if (result.IsSuccess)
                     {
                         //var responseImage = _authService.GetBase64ImageString();
-                        var responsePermissions = await _authService.GetPermissionsByUser(loginIM.strUserName);
+                        var responsePermissions = await _authService.GetPermissionsByUser(loginIM);
 
                         return StatusCode(StatusCodes.Status200OK,
                       new

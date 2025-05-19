@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Data.SqlClient;
+using SrcProject.Models;
 using SrcProject.Models.InModels;
 using SrcProject.Models.InModels.Security;
 using SrcProject.Models.OutModels;
@@ -13,12 +14,12 @@ namespace SrcProject.Services.Implement
 {
     public class Authentication_Service : IAuthentication_Service
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<ApplicationUserModel> _userManager;
+        private readonly SignInManager<ApplicationUserModel> _signInManager;
         private readonly IConfiguration _configuration;
         private readonly Jwt _jwt;
 
-        public Authentication_Service(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager,IConfiguration configuration, Jwt jwt)
+        public Authentication_Service(UserManager<ApplicationUserModel> userManager, SignInManager<ApplicationUserModel> signInManager,IConfiguration configuration, Jwt jwt)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -42,10 +43,15 @@ namespace SrcProject.Services.Implement
                     };
                 }
 
-                var user = new IdentityUser
+                var user = new ApplicationUserModel
                 {
+                    Dni = registerModelIM.Dni,
+                    FirstName = registerModelIM.FirstName,
+                    LastName = registerModelIM.LastName,
+                    BirthDay = registerModelIM.BirthDay,
+                    UserName = registerModelIM.UserName,
                     Email = registerModelIM.Email,
-                    UserName = registerModelIM.Email,
+                    PhoneNumber = registerModelIM.PhoneNumber,
                 };
 
                 var result = await _userManager.CreateAsync(user, registerModelIM.Password);
@@ -141,7 +147,7 @@ namespace SrcProject.Services.Implement
         {
             try
             {
-                var user = await _userManager.FindByEmailAsync(loginIM.strUserName);
+                var user = await _userManager.FindByEmailAsync(loginIM.strEmail);
 
                 if (user != null)
                 {
@@ -154,8 +160,8 @@ namespace SrcProject.Services.Implement
                             IsSuccess = false,
                         };
 
-                    var result = await _signInManager.PasswordSignInAsync(loginIM.strUserName, loginIM.strPassword,
-                       isPersistent: false, lockoutOnFailure: false);
+                    var result = await _signInManager.PasswordSignInAsync(user.UserName, loginIM.strPassword,
+                       isPersistent: false, lockoutOnFailure: true);
 
                     if (result.Succeeded)
                     {
@@ -218,7 +224,7 @@ namespace SrcProject.Services.Implement
             }
         }
 
-        public async Task<List<PermissionsOM>> GetPermissionsByUser(string strUserName)
+        public async Task<List<PermissionsOM>> GetPermissionsByUser(LoginIM loginIM)
         {
             try
             {
@@ -228,7 +234,7 @@ namespace SrcProject.Services.Implement
                 {
                     cnn.Open();
                     SqlCommand cmd = new SqlCommand("sp_Pwa_Sec_GetPermissionsByUser", cnn);
-                    cmd.Parameters.AddWithValue("pUsuario", strUserName);
+                    cmd.Parameters.AddWithValue("pUsuario", loginIM.strEmail);
 
                     cmd.CommandType = CommandType.StoredProcedure;
 

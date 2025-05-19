@@ -9,7 +9,7 @@ namespace SrcProject.Services.Contract
     {
         Task<ResponseManager> RegisterAsync(RegisterModelIM registerModelIM);
         Task<ResponseManager> Login(LoginIM loginIM);
-        Task<List<PermissionsOM>> GetPermissionsByUser(string strUserName);
+        Task<List<PermissionsOM>> GetPermissionsByUser(LoginIM loginIM);
 
     }
 }

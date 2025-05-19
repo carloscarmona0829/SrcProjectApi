@@ -38,8 +38,10 @@ git config user.email
 		Install-Package Microsoft.AspNetCore.Identity.EntityFrameworkCore
 		Install-Package Microsoft.EntityFrameworkCore.Tools
 		Install-Package Microsoft.EntityFrameworkCore.SqlServer
-	* Verificar que exista la carpeta Configuration con la clase del contexto (ApplicationDbContext.cs)
-	* Verificar que en Program.cs estén todas las configuraciones de identity y del contexto (ConnectionStrings debe ser igual en Program.cs y en appsettings.json)
+	* Verificar que exista la carpeta Configuration con las clases del contexto (ApplicationDbContext.cs y ApplicationDbContextFactory.cs)
+	* Crear la clase ApplicationUserModel.cs con los atributos personalizados para la cración de los usuarios
+	* Verificar que en Program.cs estén todas las configuraciones de identity y del contexto incluyendo la clase ApplicationUserModel.cs
+	(ConnectionStrings debe ser igual en Program.cs y en appsettings.json)
 	* Restaurar la base de datos si es que se sacó antes un backup.
 	* En la tabla NetUsers hay un usuario carloscarmona0829@gmail.com con clave 123456
 	* Ajustar la cadena de conexión.
@@ -53,4 +55,6 @@ git config user.email
 	* Se deben correr los siguientes comandos 
 	  add-migration initial-migration
 	  update-database
+
+Nota: Si el campo personalizado PhoneNumber cuando se cree la base de datos no queda como opcional, si es necesario, toca cambiarlo manualmente.
 

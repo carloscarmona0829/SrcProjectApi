@@ -2,7 +2,7 @@
 {
     public class LoginIM
     {
-        public string strUserName { get; set; }
+        public string strEmail { get; set; }
         public string strPassword { get; set; }
     }
 }
