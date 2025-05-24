@@ -80,8 +80,7 @@ namespace SrcProject.Services.Implement.Security
                 return new ResponseManager
                 {
                     IsSuccess = false,
-                    Message = "El usuario no fue creado.",
-                    Errors = result.Errors.Select(e => e.Description)
+                    Message = "El usuario no fue creado." + result.Errors,
                 };
             }
             catch (Exception ex)
@@ -90,7 +89,7 @@ namespace SrcProject.Services.Implement.Security
                 return new ResponseManager
                 {
                     IsSuccess = false,
-                    Message = ex.Message
+                    Message = "Error en el método RegisterAsync" + ex.Message
                 };
             }
         }
@@ -105,8 +104,9 @@ namespace SrcProject.Services.Implement.Security
                 {
                     return new ResponseManager
                     {
-                        IsSuccess = false,
+                        IsSuccess = true,
                         Message = responseLoginIdentity.Message,
+                        Data = responseLoginIdentity.Data,
                     };
                 }
                 else
@@ -138,7 +138,7 @@ namespace SrcProject.Services.Implement.Security
                 return new ResponseManager
                 {
                     IsSuccess = false,
-                    Message = ex.Message
+                    Message = "Error en el método LoginAsync" + ex.Message
                 };
             }
         }
@@ -147,10 +147,14 @@ namespace SrcProject.Services.Implement.Security
         {
             try
             {
-                var user = await _userManager.FindByEmailAsync(loginIM.strEmail);
+                var user = await _userManager.FindByEmailAsync(loginIM.strEmail);                
 
                 if (user != null)
                 {
+                    string strName = user.FirstName;
+                    string strLastName = user.LastName;
+                    string strEmail = user.Email;
+
                     var confirmedEmail = await _userManager.IsEmailConfirmedAsync(user);
 
                     if (!confirmedEmail)
@@ -168,7 +172,14 @@ namespace SrcProject.Services.Implement.Security
                         return new ResponseManager
                         {
                             IsSuccess = true,
-                            Message = "Inicio de sesión exitoso."
+                            Message = "Inicio de sesión exitoso.",
+                            Data = new
+                            {
+                                UserType = "emp", 
+                                FirstName = strName,
+                                LastName = strLastName,
+                                Email = strEmail
+                            }
                         };
                     }
                 }
@@ -180,47 +191,12 @@ namespace SrcProject.Services.Implement.Security
             }
             catch (Exception ex)
             {
-                LogManager.DebugLog("Error en el método LoginIdentity" + ex.Message);
+                LogManager.DebugLog("Error en el método LoginAsync" + ex.Message);
                 return new ResponseManager
                 {
                     IsSuccess = false,
-                    Message = ex.Message
+                    Message = "Error en el método LoginAsync" + ex.Message
                 };
-            }
-        }
-
-        private async Task<LoginOM> GetExternalUserLogin(string userName, string password)
-        {
-            try
-            {
-                var user = new LoginOM();
-
-                using (var cnn = new SqlConnection(_configuration["ConnectionStrings:cnn"]))
-                {
-                    cnn.Open();
-                    SqlCommand cmd = new SqlCommand("sp_Pwa_Sec_GetExternalUserLogin", cnn);
-                    cmd.Parameters.AddWithValue("pEmail", userName);
-                    cmd.Parameters.AddWithValue("pDni", password);
-
-                    cmd.CommandType = CommandType.StoredProcedure;
-
-                    using (var dr = await cmd.ExecuteReaderAsync())
-                    {
-                        while (await dr.ReadAsync())
-                        {
-                            user.strDni = dr["strDni"].ToString();
-                            user.strName = dr["strName"].ToString();
-                            user.strLastName = dr["strLastName"].ToString();
-                            user.strEmail = dr["strEmail"].ToString();
-                        }
-                    }
-                }
-                return user;
-            }
-            catch (Exception ex)
-            {
-                LogManager.DebugLog("Error en el método GetExternalUserLogin " + ex.Message);
-                throw;
             }
         }
 
@@ -274,6 +250,41 @@ namespace SrcProject.Services.Implement.Security
                 throw;
             }
         }
+
+        //private async Task<LoginOM> GetExternalUserLogin(string userName, string password)
+        //{
+        //    try
+        //    {
+        //        var user = new LoginOM();
+
+        //        using (var cnn = new SqlConnection(_configuration["ConnectionStrings:cnn"]))
+        //        {
+        //            cnn.Open();
+        //            SqlCommand cmd = new SqlCommand("sp_Pwa_Sec_GetExternalUserLogin", cnn);
+        //            cmd.Parameters.AddWithValue("pEmail", userName);
+        //            cmd.Parameters.AddWithValue("pDni", password);
+
+        //            cmd.CommandType = CommandType.StoredProcedure;
+
+        //            using (var dr = await cmd.ExecuteReaderAsync())
+        //            {
+        //                while (await dr.ReadAsync())
+        //                {
+        //                    user.strDni = dr["strDni"].ToString();
+        //                    user.strName = dr["strName"].ToString();
+        //                    user.strLastName = dr["strLastName"].ToString();
+        //                    user.strEmail = dr["strEmail"].ToString();
+        //                }
+        //            }
+        //        }
+        //        return user;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        LogManager.DebugLog("Error en el método GetExternalUserLogin " + ex.Message);
+        //        throw;
+        //    }
+        //}
 
     }
 }

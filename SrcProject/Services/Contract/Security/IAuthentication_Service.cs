@@ -10,6 +10,5 @@ namespace SrcProject.Services.Contract.Security
         Task<ResponseManager> RegisterAsync(RegisterModelIM registerModelIM);
         Task<ResponseManager> Login(LoginIM loginIM);
         Task<List<PermissionsOM>> GetPermissionsByUser(LoginIM loginIM);
-
     }
 }

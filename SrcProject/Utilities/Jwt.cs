@@ -40,8 +40,11 @@ namespace SrcProject.Utilities
                 {
                     IsSuccess = true,
                     Message = "Inicio de sesión exitoso.",
-                    Token = tokenAsString,
-                    ExpireDate = token.ValidTo.ToLocalTime(),
+                    Data = new
+                    {
+                        Token = tokenAsString,
+                        ExpireDate = token.ValidTo.ToLocalTime(),
+                    }
                 };
             }
             catch (Exception ex)
@@ -50,7 +53,7 @@ namespace SrcProject.Utilities
                 return new ResponseManager
                 {
                     IsSuccess = false,
-                    Message = ex.Message
+                    Message = "Error en la creación del token " + ex.Message
                 };
             }
         }

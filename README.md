@@ -22,16 +22,6 @@ Creación de un nuevo proyecto basado en otro existente
     visual studio .net desde el Visual Studio Installer que se busca en los programas de windows (Cuando se actualiza, trae los nuevos donets)
 15. Actualizar paquetes por el Nugget Packages
 
-Token GitHub
-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
-Comando Git para hacer push a través de un token|
-git remote set-url origin https://carloscarmona0829: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@github.com/carloscarmona0829/SrcProjectApi.git
-git config user.name "Carlos Carmona"
-git config user.email "carloscarmona0829@gmail.com"
-Comandos para verificar user.name y user.email
-git config user.name
-git config user.email
-
 **********************************************************************************************************************************************
 - Para correr este proyecto se debe:
 	* Verificar que se tengan instalados estos paquetes para que funcione Identity
@@ -56,5 +46,29 @@ git config user.email
 	  add-migration initial-migration
 	  update-database
 
-Nota: Si el campo personalizado PhoneNumber cuando se cree la base de datos no queda como opcional, si es necesario, toca cambiarlo manualmente.
+Nota: Si el campo personalizado PhoneNumber cuando se cree la base de datos no queda como opcional, si es necesario, 
+      toca cambiarlo manualmente desde la bd.
+
+**********************************************************************************************************************************************
+GitHub
+Token: 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
+Comando Git para hacer push a través de un token
+git remote set-url origin https://carloscarmona0829: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@github.com/carloscarmona0829/SrcProjectApi.git
+git config user.name "Carlos Carmona"
+git config user.email "carloscarmona0829@gmail.com"
+Comandos para verificar user.name y user.email
+git config user.name
+git config user.email
+
+**********************************************************************************************************************************************
+Funcionalidades y métodos del proyecto
+1. AuthenticationController (Register, Login) con Microsoft Identity 
+2. AuthorizationController (GetPartners, AddExternalUser, GetPermissionsByUser, AddPermissionsByUser, DeletePermissionsByUser, GetRoutes, GetUser) 
+   Este controlador falta ajustarlo y probarlo
+3. Utilities (Jwt, LogManager, ResponseManager)
+**********************************************************************************************************************************************
+{
+  "strEmail": "carloscarmona0829@gmail.com",
+  "strPassword": "123456"
+}
 

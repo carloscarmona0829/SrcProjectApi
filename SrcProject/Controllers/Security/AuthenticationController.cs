@@ -16,9 +16,11 @@ namespace SrcProject.Controllers.Security
     public class AuthenticationController : ControllerBase
     {
         private readonly IAuthentication_Service _authService;
-        public AuthenticationController(IAuthentication_Service authService)
+        private readonly IConfiguration _configuration;
+        public AuthenticationController(IAuthentication_Service authService, IConfiguration configuration)
         {
             _authService = authService;
+            _configuration = configuration;
         }
 
         [HttpPost("Register")]
@@ -53,6 +55,8 @@ namespace SrcProject.Controllers.Security
                     if (result.IsSuccess)
                     {
                         //var responseImage = _authService.GetBase64ImageString();
+                        Jwt jwtGenerator = new Jwt(_configuration);
+                        var token = await jwtGenerator.BuildToken(result.Data.UserType, result.Data.FirstName, result.Data.LastName, result.Data.Email);
                         var responsePermissions = await _authService.GetPermissionsByUser(loginIM);
 
                         return StatusCode(StatusCodes.Status200OK,
@@ -60,8 +64,8 @@ namespace SrcProject.Controllers.Security
                       {
                           issuccess = result.IsSuccess,
                           message = result.Message,
-                          token = result.Token,
-                          expireDate = result.ExpireDate,
+                          token = token.Data.Token,
+                          expireDate = token.Data.ExpireDate,
                           permissions = responsePermissions.Count > 0 ? responsePermissions : null,
                           //image = responseImage
                       });
@@ -75,38 +79,6 @@ namespace SrcProject.Controllers.Security
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new { IsSuccess = false, Message = "Error interno del servidor.", Result = ex.Message });
             }
-        }
-
-        [HttpGet("Signin-oidc")]
-        [AllowAnonymous]
-        public async Task<IActionResult> SignInOidc()
-        {
-            LogManager.DebugLog("Entró al método signin-oidc");
-
-            // Autentica usando el esquema de OpenID Connect
-            var result = await HttpContext.AuthenticateAsync(OpenIdConnectDefaults.AuthenticationScheme);
-
-            if (result?.Principal != null)
-            {
-                var userClaims = result.Principal.Claims;
-
-                foreach (var claim in userClaims)
-                {
-                    LogManager.DebugLog($"Claim type: {claim.Type}, value: {claim.Value}");
-                }
-
-                var userName = result.Principal.FindFirst("name")?.Value;
-                var userEmail = result.Principal.FindFirst("email")?.Value;
-
-                LogManager.DebugLog($"User authenticated: {userName}, email: {userEmail}");
-
-                return Ok("Authentication successful!");
-            }
-
-
-            // Si no está autenticado, redirigir a Azure AD para el login
-            LogManager.DebugLog("No se encontró principal. Redirigiendo a login de Azure AD.");
-            return Challenge(new AuthenticationProperties { RedirectUri = "/Auth/Signin-oidc" }, OpenIdConnectDefaults.AuthenticationScheme);
-        }
+        }        
     }
 }
