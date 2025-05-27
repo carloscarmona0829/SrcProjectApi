@@ -43,16 +43,16 @@ namespace SrcProject.Controllers.Security
                         });
                     }
 
-                    return StatusCode(StatusCodes.Status500InternalServerError, new { IsSuccess = false, Result = result.Message });
+                    return StatusCode(StatusCodes.Status200OK, new { IsSuccess = false, Result = result.Message });
                 }
 
                 return BadRequest("Algunas propiedades no son válidas.");
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new { IsSuccess = false, Message = "Error interno del servidor.", Result = ex.Message });
             }
         }
 
@@ -69,8 +69,6 @@ namespace SrcProject.Controllers.Security
                     if (result.IsSuccess)
                     {
                         //var responseImage = _authService.GetBase64ImageString();
-
-                        //Revisar bien si el token va aquí o en Service
                         Jwt jwtGenerator = new Jwt(_configuration);
                         var token = await jwtGenerator.BuildToken(result.Data.UserType, result.Data.FirstName, result.Data.LastName, result.Data.Email);
                         var responsePermissions = await _authService.GetPermissionsByUser(loginIM);
@@ -93,7 +91,8 @@ namespace SrcProject.Controllers.Security
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { IsSuccess = false, Message = "Error interno del servidor.", Result = ex.Message });
+                return StatusCode(StatusCodes.Status500InternalServerError, 
+                    new { IsSuccess = false, Message = "Error interno del servidor.", Result = ex.Message });
             }
         }
 
@@ -118,11 +117,12 @@ namespace SrcProject.Controllers.Security
                          });
                 }
 
-                return StatusCode(StatusCodes.Status500InternalServerError, new { IsSuccess = false, Result = result.Message });               
+                return StatusCode(StatusCodes.Status200OK, new { IsSuccess = false, Result = result.Message });               
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { IsSuccess = false, Message = "Error interno del servidor.", Result = ex.Message });
+                return StatusCode(StatusCodes.Status500InternalServerError, 
+                    new { IsSuccess = false, Message = "Error interno del servidor.", Result = ex.Message });
             }
         }
     }

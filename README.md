@@ -62,10 +62,10 @@ git config user.email
 
 **********************************************************************************************************************************************
 Funcionalidades y métodos del proyecto
-1. AuthenticationController (Register, Login) con Microsoft Identity 
+1. AuthenticationController (Register, Login, ComfirmEmail) con Microsoft Identity 
 2. AuthorizationController (GetPartners, AddExternalUser, GetPermissionsByUser, AddPermissionsByUser, DeletePermissionsByUser, GetRoutes, GetUser) 
    Este controlador falta ajustarlo y probarlo
-3. Utilities (Jwt, LogManager, ResponseManager)
+3. Utilities (Jwt, LogManager, ResponseManager, EmailService)
 **********************************************************************************************************************************************
 {
   "strEmail": "carloscarmona0829@gmail.com",
