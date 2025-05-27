@@ -55,6 +55,7 @@ builder.Services.AddIdentity<ApplicationUserModel, IdentityRole>(options =>
 builder.Services.AddScoped<IAuthentication_Service, Authentication_Service>();
 builder.Services.AddScoped<Jwt>();
 builder.Services.AddScoped<IAuthorization_Service, Authorization_Service>();
+builder.Services.AddTransient<EmailService>();
 
 // Configuración de la Autenticación con JWT 
 JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();

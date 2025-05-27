@@ -25,20 +25,35 @@ namespace SrcProject.Controllers.Security
 
         [HttpPost("Register")]
         [AllowAnonymous]
-        public async Task<IActionResult> RegisterAsync([FromBody] RegisterModelIM registerModelIM)
+        public async Task<IActionResult> Register([FromBody] RegisterModelIM registerModelIM)
         {
-            if (ModelState.IsValid)
+            try
             {
-                var result = await _authService.RegisterAsync(registerModelIM);
+                if (ModelState.IsValid)
+                {
+                    var result = await _authService.Register(registerModelIM);
 
-                if (result.IsSuccess)
-                    //Aquí debo crear el tercero relacionando las tablas con el campo UserName
-                    return Ok(result); // Status Code: 200 
+                    if (result.IsSuccess)
+                    {
+                        return StatusCode(StatusCodes.Status200OK,
+                        new
+                        {
+                            issuccess = result.IsSuccess,
+                            message = result.Message,
+                        });
+                    }
 
-                return BadRequest(result);
+                    return StatusCode(StatusCodes.Status500InternalServerError, new { IsSuccess = false, Result = result.Message });
+                }
+
+                return BadRequest("Algunas propiedades no son válidas.");
+
             }
+            catch (Exception)
+            {
 
-            return BadRequest("Algunas propiedades no son válidas."); // Status code: 400
+                throw;
+            }
         }
 
         [HttpPost("Login")]
@@ -54,6 +69,8 @@ namespace SrcProject.Controllers.Security
                     if (result.IsSuccess)
                     {
                         //var responseImage = _authService.GetBase64ImageString();
+
+                        //Revisar bien si el token va aquí o en Service
                         Jwt jwtGenerator = new Jwt(_configuration);
                         var token = await jwtGenerator.BuildToken(result.Data.UserType, result.Data.FirstName, result.Data.LastName, result.Data.Email);
                         var responsePermissions = await _authService.GetPermissionsByUser(loginIM);
@@ -78,6 +95,35 @@ namespace SrcProject.Controllers.Security
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new { IsSuccess = false, Message = "Error interno del servidor.", Result = ex.Message });
             }
-        }        
+        }
+
+        [HttpGet("ConfirmEmail")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ConfirmEmail(string userId, string token)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(token))
+                    return NotFound();
+
+                var result = await _authService.ConfirmEmail(userId, token);
+
+                if (result.IsSuccess)
+                {
+                    return StatusCode(StatusCodes.Status200OK,
+                         new
+                         {
+                             issuccess = result.IsSuccess,
+                             message = result.Message,
+                         });
+                }
+
+                return StatusCode(StatusCodes.Status500InternalServerError, new { IsSuccess = false, Result = result.Message });               
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { IsSuccess = false, Message = "Error interno del servidor.", Result = ex.Message });
+            }
+        }
     }
 }

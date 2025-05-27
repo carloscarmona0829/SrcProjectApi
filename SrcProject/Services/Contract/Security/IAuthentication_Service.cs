@@ -7,8 +7,9 @@ namespace SrcProject.Services.Contract.Security
 {
     public interface IAuthentication_Service
     {
-        Task<ResponseManager> RegisterAsync(RegisterModelIM registerModelIM);
+        Task<ResponseManager> Register(RegisterModelIM registerModelIM);
         Task<ResponseManager> Login(LoginIM loginIM);
         Task<List<PermissionsOM>> GetPermissionsByUser(LoginIM loginIM);
+        Task<ResponseManager> ConfirmEmail(string userId, string token);
     }
 }

@@ -18,16 +18,18 @@ namespace SrcProject.Services.Implement.Security
         private readonly SignInManager<ApplicationUserModel> _signInManager;
         private readonly IConfiguration _configuration;
         private readonly Jwt _jwt;
+        private readonly EmailService _emailService;
 
-        public Authentication_Service(UserManager<ApplicationUserModel> userManager, SignInManager<ApplicationUserModel> signInManager,IConfiguration configuration, Jwt jwt)
+        public Authentication_Service(UserManager<ApplicationUserModel> userManager, SignInManager<ApplicationUserModel> signInManager,IConfiguration configuration, Jwt jwt, EmailService emailService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
             _jwt = jwt;
+            _emailService = emailService;
         }
 
-        public async Task<ResponseManager> RegisterAsync(RegisterModelIM registerModelIM)
+        public async Task<ResponseManager> Register(RegisterModelIM registerModelIM)
         {
             try
             {
@@ -58,16 +60,15 @@ namespace SrcProject.Services.Implement.Security
 
                 if (result.Succeeded)
                 {
-                    //Envío de email de confirmación con token a través de UserManager
-                    //var confirmEmailToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    var confirmEmailToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
-                    //var encodedEmailToken = Encoding.UTF8.GetBytes(confirmEmailToken);
-                    //var validEmailToken = WebEncoders.Base64UrlEncode(encodedEmailToken);
+                    var encodedEmailToken = Encoding.UTF8.GetBytes(confirmEmailToken);
+                    var validEmailToken = WebEncoders.Base64UrlEncode(encodedEmailToken);
 
-                    //string url = $"{_configuration["AppUrl"]}/api/auth/confirmemail?userid={user.Id}&token={validEmailToken}";
+                    string url = $"{_configuration["AppUrl"]}/auth/confirmemail?userid={user.Id}&token={validEmailToken}";
 
-                    //SendMail(user.Email, "Confirmar correo electrónico", $"<h2>Sistema de información Country Club Ejecutivos</h2>" +
-                    //    $"<p>Para confirmar su correo electrónico <a href='{url}'>clic aquí</a></p>");
+                    await _emailService.SendEmailAsync(user.Email, "Confirmar correo electrónico", $"<h2>Sistema de información</h2>" +
+                        $"<p>Para confirmar su correo electrónico <a href='{url}'>clic aquí</a></p>");
 
                     return new ResponseManager
                     {
@@ -249,6 +250,49 @@ namespace SrcProject.Services.Implement.Security
                 throw;
             }
         }
+
+        public async Task<ResponseManager> ConfirmEmail(string userId, string token)
+        {
+            try
+            {
+                var user = await _userManager.FindByIdAsync(userId);
+                if (user == null)
+                    return new ResponseManager
+                    {
+                        IsSuccess = false,
+                        Message = "Confirmación de correo electrónico caducada."
+                    };
+
+                var decodedToken = WebEncoders.Base64UrlDecode(token);
+                string normalToken = Encoding.UTF8.GetString(decodedToken);
+
+                var result = await _userManager.ConfirmEmailAsync(user, normalToken);
+
+                if (result.Succeeded)
+                    return new ResponseManager
+                    {
+                        IsSuccess = true,
+                        Message = "Correo electrónico confirmado exitosamente!"
+                    };
+
+                return new ResponseManager
+                {
+                    IsSuccess = false,
+                    Message = "El correo electrónico no fue confirmado.",
+                    Data = result.Errors.Select(e => e.Description),
+                };
+            }
+            catch (Exception ex)
+            {
+                LogManager.DebugLog("Error en el método ConfirmEmailAsync" + ex.Message);
+                return new ResponseManager
+                {
+                    IsSuccess = false,
+                    Message = ex.Message
+                };
+            }
+        }
+
 
         //private async Task<LoginOM> GetExternalUserLogin(string userName, string password)
         //{
