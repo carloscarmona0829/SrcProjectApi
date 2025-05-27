@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.SqlClient;
-using SrcProject.Models.InModels;
-using SrcProject.Models.OutModels;
+using SrcProject.Models.InModels.Security;
+using SrcProject.Models.OutModels.Security;
 using SrcProject.Services.Contract.Security;
 using SrcProject.Utilities;
 using System.Data;

@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using SrcProject.Models.InModels;
 using System.Security;
 using SrcProject.Services.Contract.Security;
+using SrcProject.Models.InModels.Security;
 
 namespace SrcProject.Controllers.Security
 {

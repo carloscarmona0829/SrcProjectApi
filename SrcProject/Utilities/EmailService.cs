@@ -12,7 +12,7 @@ namespace SrcProject.Utilities
             _configuration = configuration;
         }
 
-        public async Task SendEmailAsync(string toEmail, string subject, string body)
+        public async Task SendEmail(string toEmail, string subject, string body)
         {
             var smtpSettings = _configuration.GetSection("SmtpSettings");
             var host = smtpSettings["Host"];

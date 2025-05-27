@@ -72,3 +72,15 @@ Funcionalidades y métodos del proyecto
   "strPassword": "123456"
 }
 
+{
+  "dni": "1017140829",
+  "firstName": "Carlos Alberto",
+  "lastName": "Carmona Alvarez",
+  "userName": "carloscarmona0829",
+  "birthDay": "21/11/1986",
+  "phoneNumber": "3013258304",
+  "email": "carloscarmona0829@gmail.com",
+  "password": "123456",
+  "confirmPassword": "123456"
+}
+

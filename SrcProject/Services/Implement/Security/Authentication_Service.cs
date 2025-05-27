@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Data.SqlClient;
-using SrcProject.Models.InModels;
 using SrcProject.Models.InModels.Security;
-using SrcProject.Models.OutModels;
-using SrcProject.Models.Security;
+using SrcProject.Models.OutModels.Security;
 using SrcProject.Services.Contract.Security;
 using SrcProject.Utilities;
 using System.Data;
@@ -14,13 +12,13 @@ namespace SrcProject.Services.Implement.Security
 {
     public class Authentication_Service : IAuthentication_Service
     {
-        private readonly UserManager<ApplicationUserModel> _userManager;
-        private readonly SignInManager<ApplicationUserModel> _signInManager;
+        private readonly UserManager<ApplicationUserIM> _userManager;
+        private readonly SignInManager<ApplicationUserIM> _signInManager;
         private readonly IConfiguration _configuration;
         private readonly Jwt _jwt;
         private readonly EmailService _emailService;
 
-        public Authentication_Service(UserManager<ApplicationUserModel> userManager, SignInManager<ApplicationUserModel> signInManager,IConfiguration configuration, Jwt jwt, EmailService emailService)
+        public Authentication_Service(UserManager<ApplicationUserIM> userManager, SignInManager<ApplicationUserIM> signInManager,IConfiguration configuration, Jwt jwt, EmailService emailService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -45,7 +43,7 @@ namespace SrcProject.Services.Implement.Security
                     };
                 }
 
-                var user = new ApplicationUserModel
+                var user = new ApplicationUserIM
                 {
                     Dni = registerModelIM.Dni,
                     FirstName = registerModelIM.FirstName,
@@ -67,7 +65,7 @@ namespace SrcProject.Services.Implement.Security
 
                     string url = $"{_configuration["AppUrl"]}/auth/confirmemail?userid={user.Id}&token={validEmailToken}";
 
-                    await _emailService.SendEmailAsync(user.Email, "Confirmar correo electrónico", $"<h2>Sistema de información</h2>" +
+                    await _emailService.SendEmail(user.Email, "Confirmar correo electrónico", $"<h2>Sistema de información</h2>" +
                         $"<p>Para confirmar su correo electrónico <a href='{url}'>clic aquí</a></p>");
 
                     return new ResponseManager
@@ -85,11 +83,11 @@ namespace SrcProject.Services.Implement.Security
             }
             catch (Exception ex)
             {
-                LogManager.DebugLog("Error en el método RegisterAsync");
+                LogManager.DebugLog("Error en el método Register");
                 return new ResponseManager
                 {
                     IsSuccess = false,
-                    Message = "Error en el método RegisterAsync " + ex.Message
+                    Message = "Error en el método Register " + ex.Message
                 };
             }
         }
@@ -117,28 +115,14 @@ namespace SrcProject.Services.Implement.Security
                         Message = responseLoginIdentity.Message
                     };
                 }
-
-                //var externalUserLogin = await GetExternalUserLogin(loginIM.strUserName, loginIM.strPassword);
-
-                //if (externalUserLogin.strDni != null)
-                //{
-                //    string strUserType = "ext";
-                //    return await _jwt.BuildToken(strUserType, externalUserLogin.strName, externalUserLogin.strLastName, externalUserLogin.strEmail);
-                //}
-
-                //return new ResponseManager
-                //{
-                //    IsSuccess = false,
-                //    Message = "El nombre de usuario o la contraseña no son correctos."
-                //};
             }
             catch (Exception ex)
             {
-                LogManager.DebugLog("Error en el método LoginAsync" + ex.Message);
+                LogManager.DebugLog("Error en el método Login" + ex.Message);
                 return new ResponseManager
                 {
                     IsSuccess = false,
-                    Message = "Error en el método LoginAsync" + ex.Message
+                    Message = "Error en el método Login" + ex.Message
                 };
             }
         }
@@ -191,11 +175,11 @@ namespace SrcProject.Services.Implement.Security
             }
             catch (Exception ex)
             {
-                LogManager.DebugLog("Error en el método LoginAsync" + ex.Message);
+                LogManager.DebugLog("Error en el método LoginIdentity" + ex.Message);
                 return new ResponseManager
                 {
                     IsSuccess = false,
-                    Message = "Error en el método LoginAsync" + ex.Message
+                    Message = "Error en el método LoginIdentity" + ex.Message
                 };
             }
         }
@@ -246,7 +230,7 @@ namespace SrcProject.Services.Implement.Security
             }
             catch (Exception ex)
             {
-                LogManager.DebugLog("Error en el método GetPermissionsByUserAsync " + ex.Message);
+                LogManager.DebugLog("Error en el método GetPermissionsByUser " + ex.Message);
                 throw;
             }
         }
@@ -284,7 +268,102 @@ namespace SrcProject.Services.Implement.Security
             }
             catch (Exception ex)
             {
-                LogManager.DebugLog("Error en el método ConfirmEmailAsync" + ex.Message);
+                LogManager.DebugLog("Error en el método ConfirmEmail" + ex.Message);
+                return new ResponseManager
+                {
+                    IsSuccess = false,
+                    Message = ex.Message
+                };
+            }
+        }
+
+        public async Task<ResponseManager> ForgetPassword(string email)
+        {
+            try
+            {
+                var user = await _userManager.FindByEmailAsync(email);
+                if (user == null)
+                    return new ResponseManager
+                    {
+                        IsSuccess = false,
+                        Message = "No se encontró ningún usuario asociado a este correo electrónico."
+                    };
+
+                var confirmedEmail = await _userManager.IsEmailConfirmedAsync(user);
+
+                if (!confirmedEmail)
+                    return new ResponseManager
+                    {
+                        IsSuccess = false,
+                        Message = "El correo electrónico no ha sido confirmado."
+                    };
+
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var encodedToken = Encoding.UTF8.GetBytes(token);
+                var validToken = WebEncoders.Base64UrlEncode(encodedToken);
+
+                string url = $"{_configuration["AppUrl"]}/auth/resetpassword?email={email}&token={validToken}";
+
+                await _emailService.SendEmail(email, "Restablecer contraseña", $"<h2>Sistema de información</h2>" + 
+                    "<h1>Siga las instrucciones para restablecer su contraseña.</h1>" + $"<p>Para restablecer su contraseña <a href='{url}'>clic aquí</a></p>");
+
+                return new ResponseManager
+                {
+                    IsSuccess = true,
+                    Message = "Se ha enviado un mensaje a su correo electrónico con las instrucciones para recuperar su contraseña!"
+                };
+            }
+            catch (Exception ex)
+            {
+                LogManager.DebugLog("Error en el método ForgetPassword" + ex.Message);
+                return new ResponseManager
+                {
+                    IsSuccess = false,
+                    Message = ex.Message
+                };
+            }
+        }
+
+        public async Task<ResponseManager> ResetPassword(ResetPasswordIM resetPasswordIM)
+        {
+            try
+            {
+                var user = await _userManager.FindByEmailAsync(resetPasswordIM.Email);
+                if (user == null)
+                    return new ResponseManager
+                    {
+                        IsSuccess = false,
+                        Message = "No se encontró ningún usuario asociado a este correo electrónico."
+                    };
+
+                if (resetPasswordIM.NewPassword != resetPasswordIM.ConfirmPassword)
+                    return new ResponseManager
+                    {
+                        IsSuccess = false,
+                        Message = "Las contraseñas no coinciden."
+                    };
+
+                var decodedToken = WebEncoders.Base64UrlDecode(resetPasswordIM.Token);
+                string normalToken = Encoding.UTF8.GetString(decodedToken);
+
+                var result = await _userManager.ResetPasswordAsync(user, normalToken, resetPasswordIM.NewPassword);
+
+                if (result.Succeeded)
+                    return new ResponseManager
+                    {
+                        IsSuccess = true,
+                        Message = "La contraseña ha sido restablecida exitosamente!"
+                    };
+
+                return new ResponseManager
+                {
+                    IsSuccess = false,
+                    Message = "No se pudo restablecer la contraseña." + "Error: " + result.Errors.ElementAtOrDefault(0).Code,
+                };
+            }
+            catch (Exception ex)
+            {
+                LogManager.DebugLog("Error en el método ResetPassword" + ex.Message);
                 return new ResponseManager
                 {
                     IsSuccess = false,

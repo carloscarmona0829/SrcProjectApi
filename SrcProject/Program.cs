@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SrcProject.Configuration;
-using SrcProject.Models.Security;
+using SrcProject.Models.InModels.Security;
 using SrcProject.Services.Contract.Security;
 using SrcProject.Services.Implement.Security;
 using SrcProject.Utilities;
@@ -26,7 +26,7 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("cnn")));
 //options.UseSqlServer(builder.Configuration["ConnectionStrings:cnn"]));
 
 //Configuración de Identity 
-builder.Services.AddIdentity<ApplicationUserModel, IdentityRole>(options =>
+builder.Services.AddIdentity<ApplicationUserIM, IdentityRole>(options =>
 {
     // User settings
     options.User.RequireUniqueEmail = true;

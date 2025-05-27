@@ -1,5 +1,5 @@
-﻿using SrcProject.Models.InModels;
-using SrcProject.Models.OutModels;
+﻿using SrcProject.Models.InModels.Security;
+using SrcProject.Models.OutModels.Security;
 using System.Security;
 
 namespace SrcProject.Services.Contract.Security

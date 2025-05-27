@@ -1,6 +1,5 @@
-﻿using SrcProject.Models.InModels;
-using SrcProject.Models.InModels.Security;
-using SrcProject.Models.OutModels;
+﻿using SrcProject.Models.InModels.Security;
+using SrcProject.Models.OutModels.Security;
 using SrcProject.Utilities;
 
 namespace SrcProject.Services.Contract.Security
@@ -11,5 +10,7 @@ namespace SrcProject.Services.Contract.Security
         Task<ResponseManager> Login(LoginIM loginIM);
         Task<List<PermissionsOM>> GetPermissionsByUser(LoginIM loginIM);
         Task<ResponseManager> ConfirmEmail(string userId, string token);
+        Task<ResponseManager> ForgetPassword(string email);
+        Task<ResponseManager> ResetPassword(ResetPasswordIM resetPasswordIM);
     }
 }

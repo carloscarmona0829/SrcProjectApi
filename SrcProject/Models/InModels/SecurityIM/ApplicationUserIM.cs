@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
-namespace SrcProject.Models.Security
+namespace SrcProject.Models.InModels.Security
 {
-    public class ApplicationUserModel : IdentityUser
+    public class ApplicationUserIM : IdentityUser
     {
         // Propiedades personalizadas que modifican la tabla AspNetUsers de la Base de datos de Identity
 

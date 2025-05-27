@@ -1,4 +1,4 @@
-﻿namespace SrcProject.Models.InModels
+﻿namespace SrcProject.Models.InModels.Security
 {
     public class AddExternalUserIM
     {

@@ -1,4 +1,4 @@
-﻿namespace SrcProject.Models.OutModels
+﻿namespace SrcProject.Models.OutModels.Security
 {
     public class RoutesOM
     {

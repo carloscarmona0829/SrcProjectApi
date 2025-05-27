@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SrcProject.Models.InModels;
 using SrcProject.Models.InModels.Security;
 using SrcProject.Services.Contract.Security;
 using SrcProject.Utilities;
@@ -122,6 +121,64 @@ namespace SrcProject.Controllers.Security
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, 
+                    new { IsSuccess = false, Message = "Error interno del servidor.", Result = ex.Message });
+            }
+        }
+
+        [HttpPost("ForgetPassword")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ForgetPassword(string email)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(email))
+                    return NotFound();
+
+                var result = await _authService.ForgetPassword(email);
+
+                if (result.IsSuccess)
+                    return StatusCode(StatusCodes.Status200OK,
+                            new
+                            {
+                                issuccess = result.IsSuccess,
+                                message = result.Message,
+                            });
+
+                return StatusCode(StatusCodes.Status200OK, new { IsSuccess = false, Result = result.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new { IsSuccess = false, Message = "Error interno del servidor.", Result = ex.Message });
+            }
+        }
+        
+        [HttpPost("ResetPassword")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ResetPassword([FromForm] ResetPasswordIM resetPasswordIM)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var result = await _authService.ResetPassword(resetPasswordIM);
+
+                    if (result.IsSuccess)
+                        return StatusCode(StatusCodes.Status200OK,
+                             new
+                             {
+                                 issuccess = result.IsSuccess,
+                                 message = result.Message,
+                             });
+
+                    return StatusCode(StatusCodes.Status200OK, new { IsSuccess = false, Result = result.Message });
+                }
+
+                return BadRequest("Algunas propiedades no son válidas.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
                     new { IsSuccess = false, Message = "Error interno del servidor.", Result = ex.Message });
             }
         }
