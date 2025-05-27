@@ -80,43 +80,6 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWTSettings:JWTKey"])),
         ValidateIssuerSigningKey = true
     };
-})
-    // Configuración de OpenIdConnect - Domain Azure Connection
-.AddOpenIdConnect("OpenIdConnect", options =>
-{
-    options.ClientId = builder.Configuration["AzureAd:ClientId"];
-    options.ClientSecret = builder.Configuration["AzureAd:ClientSecret"];
-    options.Authority = $"{builder.Configuration["AzureAd:Instance"]}{builder.Configuration["AzureAd:TenantId"]}";
-    options.ResponseType = "code";
-    options.SaveTokens = true;
-    options.CallbackPath = "/Auth/Signin-oidc"; // Asegúrate de que esto coincida con tu configuración en Azure AD
-    options.TokenValidationParameters = new TokenValidationParameters
-    {
-        NameClaimType = "name"
-    };
-    options.Events = new OpenIdConnectEvents
-    {
-        OnMessageReceived = context =>
-        {
-            if (string.IsNullOrEmpty(context.ProtocolMessage.State))
-            {
-                context.HandleResponse();
-                context.Response.Redirect("/error?message=State+is+missing+or+invalid");
-            }
-            return Task.CompletedTask;
-        }
-    };
-});
-
-//Configuración de Cookies - Domain Azure Connection
-builder.Services.ConfigureApplicationCookie(options =>
-{
-    options.Cookie.HttpOnly = true;
-options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-options.Cookie.SameSite = SameSiteMode.None;
-options.Cookie.Name = ".AspNetCore.Cookies";
-options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
-options.SlidingExpiration = true;
 });
 
 // Configuración de Cors
