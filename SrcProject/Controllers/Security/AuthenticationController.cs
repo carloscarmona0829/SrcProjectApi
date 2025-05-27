@@ -25,7 +25,6 @@ namespace SrcProject.Controllers.Security
 
         [HttpPost("Register")]
         [AllowAnonymous]
-
         public async Task<IActionResult> RegisterAsync([FromBody] RegisterModelIM registerModelIM)
         {
             if (ModelState.IsValid)

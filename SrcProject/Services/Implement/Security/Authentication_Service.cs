@@ -73,14 +73,13 @@ namespace SrcProject.Services.Implement.Security
                     {
                         IsSuccess = true,
                         Message = "El usuario fue creado exitosamente."
-                        //Errors = result.Errors.Select(e => e.Description)
                     };
                 }
 
                 return new ResponseManager
                 {
                     IsSuccess = false,
-                    Message = "El usuario no fue creado." + result.Errors,
+                    Message = "El usuario no fue creado. " + "Error: " + result.Errors.ElementAtOrDefault(0).Code,
                 };
             }
             catch (Exception ex)
@@ -89,7 +88,7 @@ namespace SrcProject.Services.Implement.Security
                 return new ResponseManager
                 {
                     IsSuccess = false,
-                    Message = "Error en el método RegisterAsync" + ex.Message
+                    Message = "Error en el método RegisterAsync " + ex.Message
                 };
             }
         }
