@@ -13,9 +13,8 @@ namespace SrcProject.Models.InModels.Security
 
         [Required(ErrorMessage = "El campo LastName es obligatorio.")]
         public string LastName { get; set; }
-
-        [Required(ErrorMessage = "El campo UserName es obligatorio.")]        
-        public string UserName { get; set; }
+              
+        public string? UserName { get; set; }
 
         public string? BirthDay { get; set; }
         public string? PhoneNumber { get; set; }

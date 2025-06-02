@@ -39,6 +39,7 @@ namespace SrcProject.Controllers.Security
                         {
                             issuccess = result.IsSuccess,
                             message = result.Message,
+                            Response = result.Response
                         });
                     }
 
@@ -69,17 +70,17 @@ namespace SrcProject.Controllers.Security
                     {
                         //var responseImage = _authService.GetBase64ImageString();
                         Jwt jwtGenerator = new Jwt(_configuration);
-                        var token = await jwtGenerator.BuildToken(result.Data.UserType, result.Data.FirstName, result.Data.LastName, result.Data.Email);
-                        var responsePermissions = await _authService.GetPermissionsByUser(loginIM);
+                        var token = await jwtGenerator.BuildToken(result.Response.UserType, result.Response.FirstName, result.Response.LastName, result.Response.Email);
+                        var permissions = await _authService.GetPermissionsByUser(loginIM);
 
                         return StatusCode(StatusCodes.Status200OK,
                       new
                       {
                           issuccess = result.IsSuccess,
                           message = result.Message,
-                          token = token.Data.Token,
-                          expireDate = token.Data.ExpireDate,
-                          permissions = responsePermissions.Count > 0 ? responsePermissions : null,
+                          token = token.Response.Token,
+                          expireDate = token.Response.ExpireDate,
+                          permissions = permissions.Response.Count > 0 ? permissions : null,
                           //image = responseImage
                       });
                     }
@@ -91,7 +92,7 @@ namespace SrcProject.Controllers.Security
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, 
-                    new { IsSuccess = false, Message = "Error interno del servidor.", Result = ex.Message });
+                    new { IsSuccess = false, Message = "Error interno del servidor. ", Result = ex.Message });
             }
         }
 

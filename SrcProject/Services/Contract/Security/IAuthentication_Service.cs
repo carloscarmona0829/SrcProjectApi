@@ -8,7 +8,7 @@ namespace SrcProject.Services.Contract.Security
     {
         Task<ResponseManager> Register(RegisterModelIM registerModelIM);
         Task<ResponseManager> Login(LoginIM loginIM);
-        Task<List<PermissionsOM>> GetPermissionsByUser(LoginIM loginIM);
+        Task<ResponseManager> GetPermissionsByUser(LoginIM loginIM);
         Task<ResponseManager> ConfirmEmail(string userId, string token);
         Task<ResponseManager> ForgetPassword(string email);
         Task<ResponseManager> ResetPassword(ResetPasswordIM resetPasswordIM);

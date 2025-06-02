@@ -39,8 +39,8 @@ namespace SrcProject.Utilities
                 return new ResponseManager
                 {
                     IsSuccess = true,
-                    Message = "Inicio de sesión exitoso.",
-                    Data = new
+                    Message = "El token se generó exitosamente.",
+                    Response = new
                     {
                         Token = tokenAsString,
                         ExpireDate = token.ValidTo.ToLocalTime(),
@@ -49,11 +49,11 @@ namespace SrcProject.Utilities
             }
             catch (Exception ex)
             {
-                LogManager.DebugLog("Error en la creación del token " + ex.Message);
+                LogManager.DebugLog("Error en la creación del token. " + ex.Message);
                 return new ResponseManager
                 {
                     IsSuccess = false,
-                    Message = "Error en la creación del token " + ex.Message
+                    Message = "Error en la creación del token. " + ex.Message
                 };
             }
         }

@@ -62,25 +62,26 @@ git config user.email
 
 **********************************************************************************************************************************************
 Funcionalidades y métodos del proyecto
-1. AuthenticationController (Register, Login, ComfirmEmail) con Microsoft Identity 
+1. AuthenticationController (Register, Login, ComfirmEmail, ForgetPassword, ResetPassword) con Microsoft Identity 
 2. AuthorizationController (GetPartners, AddExternalUser, GetPermissionsByUser, AddPermissionsByUser, DeletePermissionsByUser, GetRoutes, GetUser) 
    Este controlador falta ajustarlo y probarlo
 3. Utilities (Jwt, LogManager, ResponseManager, EmailService)
 **********************************************************************************************************************************************
 {
-  "strEmail": "carloscarmona0829@gmail.com",
-  "strPassword": "123456"
+  "strUserName": "carloscarmona0829",
+  "strPassword": "1017140829"
 }
 
 {
   "dni": "1017140829",
   "firstName": "Carlos Alberto",
-  "lastName": "Carmona Alvarez",
-  "userName": "carloscarmona0829",
+  "lastName": "Carmona Alvarez",  
   "birthDay": "21/11/1986",
   "phoneNumber": "3013258304",
   "email": "carloscarmona0829@gmail.com",
   "password": "123456",
   "confirmPassword": "123456"
 }
+
+
 

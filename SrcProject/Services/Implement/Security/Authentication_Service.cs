@@ -49,7 +49,7 @@ namespace SrcProject.Services.Implement.Security
                     FirstName = registerModelIM.FirstName,
                     LastName = registerModelIM.LastName,
                     BirthDay = registerModelIM.BirthDay,
-                    UserName = registerModelIM.UserName,
+                    UserName = registerModelIM.Email.Substring(0, registerModelIM.Email.IndexOf('@')),
                     Email = registerModelIM.Email,
                     PhoneNumber = registerModelIM.PhoneNumber,
                 };
@@ -71,23 +71,24 @@ namespace SrcProject.Services.Implement.Security
                     return new ResponseManager
                     {
                         IsSuccess = true,
-                        Message = "El usuario fue creado exitosamente."
+                        Message = "El usuario fue creado exitosamente.",
+                        Response = user
                     };
                 }
 
                 return new ResponseManager
                 {
                     IsSuccess = false,
-                    Message = "El usuario no fue creado. " + "Error: " + result.Errors.ElementAtOrDefault(0).Code,
+                    Message = "El usuario no fue creado. " + result.Errors.ElementAtOrDefault(0).Code,
                 };
             }
             catch (Exception ex)
             {
-                LogManager.DebugLog("Error en el método Register");
+                LogManager.DebugLog("Error en el método Register. " + ex.Message);
                 return new ResponseManager
                 {
                     IsSuccess = false,
-                    Message = "Error en el método Register " + ex.Message
+                    Message = "Error en el método Register. " + ex.Message
                 };
             }
         }
@@ -104,7 +105,7 @@ namespace SrcProject.Services.Implement.Security
                     {
                         IsSuccess = true,
                         Message = responseLoginIdentity.Message,
-                        Data = responseLoginIdentity.Data,
+                        Response = responseLoginIdentity.Response,
                     };
                 }
                 else
@@ -118,11 +119,11 @@ namespace SrcProject.Services.Implement.Security
             }
             catch (Exception ex)
             {
-                LogManager.DebugLog("Error en el método Login" + ex.Message);
+                LogManager.DebugLog("Error en el método Login. " + ex.Message);
                 return new ResponseManager
                 {
                     IsSuccess = false,
-                    Message = "Error en el método Login" + ex.Message
+                    Message = "Error en el método Login. " + ex.Message
                 };
             }
         }
@@ -131,7 +132,9 @@ namespace SrcProject.Services.Implement.Security
         {
             try
             {
-                var user = await _userManager.FindByEmailAsync(loginIM.strEmail);                
+                var user = loginIM.strUserName.Contains('@') 
+                    ? await _userManager.FindByEmailAsync(loginIM.strUserName) 
+                    : await _userManager.FindByNameAsync(loginIM.strUserName);                
 
                 if (user != null)
                 {
@@ -144,8 +147,8 @@ namespace SrcProject.Services.Implement.Security
                     if (!confirmedEmail)
                         return new ResponseManager
                         {
-                            Message = "El usuario no ha confirmado el correo electrónico.",
                             IsSuccess = false,
+                            Message = "El usuario no ha confirmado el correo electrónico.",
                         };
 
                     var result = await _signInManager.PasswordSignInAsync(user.UserName, loginIM.strPassword,
@@ -157,7 +160,7 @@ namespace SrcProject.Services.Implement.Security
                         {
                             IsSuccess = true,
                             Message = "Inicio de sesión exitoso.",
-                            Data = new
+                            Response = new
                             {
                                 UserType = "emp", 
                                 FirstName = strName,
@@ -175,16 +178,16 @@ namespace SrcProject.Services.Implement.Security
             }
             catch (Exception ex)
             {
-                LogManager.DebugLog("Error en el método LoginIdentity" + ex.Message);
+                LogManager.DebugLog("Error en el método LoginIdentity. " + ex.Message);
                 return new ResponseManager
                 {
                     IsSuccess = false,
-                    Message = "Error en el método LoginIdentity" + ex.Message
+                    Message = "Error en el método LoginIdentity. " + ex.Message
                 };
             }
         }
 
-        public async Task<List<PermissionsOM>> GetPermissionsByUser(LoginIM loginIM)
+        public async Task<ResponseManager> GetPermissionsByUser(LoginIM loginIM)
         {
             try
             {
@@ -194,7 +197,7 @@ namespace SrcProject.Services.Implement.Security
                 {
                     cnn.Open();
                     SqlCommand cmd = new SqlCommand("sp_Pwa_Sec_GetPermissionsByUser", cnn);
-                    cmd.Parameters.AddWithValue("pUsuario", loginIM.strEmail);
+                    cmd.Parameters.AddWithValue("pUsuario", loginIM.strUserName);
 
                     cmd.CommandType = CommandType.StoredProcedure;
 
@@ -226,11 +229,16 @@ namespace SrcProject.Services.Implement.Security
                         }
                     }
                 }
-                return permisions;
+                return new ResponseManager
+                {
+                    IsSuccess = true,
+                    Message = "Permisos consultados exitosamente.",
+                    Response = permisions
+                };
             }
             catch (Exception ex)
             {
-                LogManager.DebugLog("Error en el método GetPermissionsByUser " + ex.Message);
+                LogManager.DebugLog("Error en el método GetPermissionsByUser. " + ex.Message);
                 throw;
             }
         }
@@ -263,12 +271,12 @@ namespace SrcProject.Services.Implement.Security
                 {
                     IsSuccess = false,
                     Message = "El correo electrónico no fue confirmado.",
-                    Data = result.Errors.Select(e => e.Description),
+                    Response = result.Errors.Select(e => e.Description),
                 };
             }
             catch (Exception ex)
             {
-                LogManager.DebugLog("Error en el método ConfirmEmail" + ex.Message);
+                LogManager.DebugLog("Error en el método ConfirmEmail. " + ex.Message);
                 return new ResponseManager
                 {
                     IsSuccess = false,
@@ -315,7 +323,7 @@ namespace SrcProject.Services.Implement.Security
             }
             catch (Exception ex)
             {
-                LogManager.DebugLog("Error en el método ForgetPassword" + ex.Message);
+                LogManager.DebugLog("Error en el método ForgetPassword. " + ex.Message);
                 return new ResponseManager
                 {
                     IsSuccess = false,
@@ -358,12 +366,12 @@ namespace SrcProject.Services.Implement.Security
                 return new ResponseManager
                 {
                     IsSuccess = false,
-                    Message = "No se pudo restablecer la contraseña." + "Error: " + result.Errors.ElementAtOrDefault(0).Code,
+                    Message = "No se pudo restablecer la contraseña. " + result.Errors.ElementAtOrDefault(0).Code,
                 };
             }
             catch (Exception ex)
             {
-                LogManager.DebugLog("Error en el método ResetPassword" + ex.Message);
+                LogManager.DebugLog("Error en el método ResetPassword. " + ex.Message);
                 return new ResponseManager
                 {
                     IsSuccess = false,

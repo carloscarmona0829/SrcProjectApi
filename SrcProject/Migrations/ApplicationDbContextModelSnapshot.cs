@@ -155,7 +155,7 @@ namespace SrcProject.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("SrcProject.Models.ApplicationUserModel", b =>
+            modelBuilder.Entity("SrcProject.Models.InModels.Security.ApplicationUserIM", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -247,7 +247,7 @@ namespace SrcProject.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("SrcProject.Models.ApplicationUserModel", null)
+                    b.HasOne("SrcProject.Models.InModels.Security.ApplicationUserIM", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -256,7 +256,7 @@ namespace SrcProject.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("SrcProject.Models.ApplicationUserModel", null)
+                    b.HasOne("SrcProject.Models.InModels.Security.ApplicationUserIM", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -271,7 +271,7 @@ namespace SrcProject.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SrcProject.Models.ApplicationUserModel", null)
+                    b.HasOne("SrcProject.Models.InModels.Security.ApplicationUserIM", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -280,7 +280,7 @@ namespace SrcProject.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("SrcProject.Models.ApplicationUserModel", null)
+                    b.HasOne("SrcProject.Models.InModels.Security.ApplicationUserIM", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
