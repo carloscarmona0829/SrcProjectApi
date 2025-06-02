@@ -53,6 +53,17 @@ namespace SrcProject.Services.Implement.Security
                     Email = registerModelIM.Email,
                     PhoneNumber = registerModelIM.PhoneNumber,
                 };
+               
+                var emailExist = await _userManager.FindByEmailAsync(user.Email);
+
+                if (emailExist != null)
+                {
+                    return new ResponseManager
+                    {
+                        IsSuccess = false,
+                        Message = "El usuario ya existe en la base de datos del sistema."
+                    };
+                }
 
                 var result = await _userManager.CreateAsync(user, registerModelIM.Password);
 
