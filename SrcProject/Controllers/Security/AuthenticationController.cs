@@ -96,7 +96,7 @@ namespace SrcProject.Controllers.Security
             }
         }
 
-        [HttpGet("ConfirmEmail")]
+        [HttpPost("ConfirmEmail")]
         [AllowAnonymous]
         public async Task<IActionResult> ConfirmEmail(string userId, string token)
         {
@@ -117,7 +117,7 @@ namespace SrcProject.Controllers.Security
                          });
                 }
 
-                return StatusCode(StatusCodes.Status200OK, new { IsSuccess = false, Result = result.Message });               
+                return StatusCode(StatusCodes.Status200OK, new { IsSuccess = false, message = result.Message });               
             }
             catch (Exception ex)
             {

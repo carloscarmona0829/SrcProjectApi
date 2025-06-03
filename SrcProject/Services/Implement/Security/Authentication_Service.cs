@@ -74,7 +74,7 @@ namespace SrcProject.Services.Implement.Security
                     var encodedEmailToken = Encoding.UTF8.GetBytes(confirmEmailToken);
                     var validEmailToken = WebEncoders.Base64UrlEncode(encodedEmailToken);
 
-                    string url = $"{_configuration["AppUrl"]}/auth/confirmemail?userid={user.Id}&token={validEmailToken}";
+                    string url = $"{_configuration["Frontend_Local_Url"]}/confirm-email?userid={user.Id}&token={validEmailToken}";
 
                     await _emailService.SendEmail(user.Email, "Confirmar correo electrónico", $"<h2>Sistema de información</h2>" +
                         $"<p>Para confirmar su correo electrónico <a href='{url}'>clic aquí</a></p>");

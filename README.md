@@ -46,9 +46,6 @@ Creación de un nuevo proyecto basado en otro existente
 	  add-migration initial-migration
 	  update-database
 
-Nota: Si el campo personalizado PhoneNumber cuando se cree la base de datos no queda como opcional, si es necesario, 
-      toca cambiarlo manualmente desde la bd.
-
 **********************************************************************************************************************************************
 GitHub
 Token: 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
