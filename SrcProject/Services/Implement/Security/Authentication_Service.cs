@@ -271,18 +271,18 @@ namespace SrcProject.Services.Implement.Security
 
                 var result = await _userManager.ConfirmEmailAsync(user, normalToken);
 
-                if (result.Succeeded)
+                if (!result.Succeeded)
                     return new ResponseManager
                     {
-                        IsSuccess = true,
-                        Message = "Correo electrónico confirmado exitosamente!"
+                        IsSuccess = false,
+                        Message = "El correo electrónico no fue confirmado.",
+                        Response = result.Errors.Select(e => e.Description),
                     };
 
                 return new ResponseManager
                 {
-                    IsSuccess = false,
-                    Message = "El correo electrónico no fue confirmado.",
-                    Response = result.Errors.Select(e => e.Description),
+                    IsSuccess = true,
+                    Message = "Correo electrónico confirmado exitosamente!"                    
                 };
             }
             catch (Exception ex)

@@ -35,15 +35,15 @@ namespace SrcProject.Controllers.Security
                     if (result.IsSuccess)
                     {
                         return StatusCode(StatusCodes.Status200OK,
-                        new
+                        new ResponseManager
                         {
-                            issuccess = result.IsSuccess,
-                            message = result.Message,
+                            IsSuccess = result.IsSuccess,
+                            Message = result.Message,
                             Response = result.Response
                         });
                     }
 
-                    return StatusCode(StatusCodes.Status200OK, new { IsSuccess = false, Result = result.Message });
+                    return StatusCode(StatusCodes.Status200OK, new ResponseManager { IsSuccess = false, Response = result.Message });
                 }
 
                 return BadRequest("Algunas propiedades no son válidas.");
@@ -52,7 +52,7 @@ namespace SrcProject.Controllers.Security
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                    new { IsSuccess = false, Message = "Error interno del servidor.", Result = ex.Message });
+                    new ResponseManager { IsSuccess = false, Message = "Error interno del servidor.", Response = ex.Message });
             }
         }
 
@@ -74,7 +74,7 @@ namespace SrcProject.Controllers.Security
                         var permissions = await _authService.GetPermissionsByUser(loginIM);
 
                         return StatusCode(StatusCodes.Status200OK,
-                      new
+                      new 
                       {
                           issuccess = result.IsSuccess,
                           message = result.Message,
@@ -84,7 +84,7 @@ namespace SrcProject.Controllers.Security
                           //image = responseImage
                       });
                     }
-                    return StatusCode(StatusCodes.Status200OK, new { issuccess = false, message = result.Message });
+                    return StatusCode(StatusCodes.Status200OK, new ResponseManager { IsSuccess = false, Message = result.Message });
                 }
 
                 return BadRequest("Algunas propiedades no son válidas.");
@@ -92,7 +92,7 @@ namespace SrcProject.Controllers.Security
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, 
-                    new { IsSuccess = false, Message = "Error interno del servidor. ", Result = ex.Message });
+                    new ResponseManager { IsSuccess = false, Message = "Error interno del servidor. ", Response = ex.Message });
             }
         }
 
@@ -102,27 +102,24 @@ namespace SrcProject.Controllers.Security
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(token))
-                    return NotFound();
-
                 var result = await _authService.ConfirmEmail(userId, token);
 
                 if (result.IsSuccess)
                 {
                     return StatusCode(StatusCodes.Status200OK,
-                         new
+                         new ResponseManager
                          {
-                             issuccess = result.IsSuccess,
-                             message = result.Message,
+                             IsSuccess = result.IsSuccess,
+                             Message = result.Message,
                          });
                 }
 
-                return StatusCode(StatusCodes.Status200OK, new { IsSuccess = false, message = result.Message });               
+                return StatusCode(StatusCodes.Status200OK, new ResponseManager { IsSuccess = false, Message = result.Message });               
             }
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, 
-                    new { IsSuccess = false, Message = "Error interno del servidor.", Result = ex.Message });
+                    new ResponseManager { IsSuccess = false, Message = "Error interno del servidor.", Response = ex.Message });
             }
         }
 
@@ -139,18 +136,18 @@ namespace SrcProject.Controllers.Security
 
                 if (result.IsSuccess)
                     return StatusCode(StatusCodes.Status200OK,
-                            new
+                            new ResponseManager
                             {
-                                issuccess = result.IsSuccess,
-                                message = result.Message,
+                                IsSuccess = result.IsSuccess,
+                                Message = result.Message,
                             });
 
-                return StatusCode(StatusCodes.Status200OK, new { IsSuccess = false, Result = result.Message });
+                return StatusCode(StatusCodes.Status200OK, new ResponseManager { IsSuccess = false, Response = result.Message });
             }
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                    new { IsSuccess = false, Message = "Error interno del servidor.", Result = ex.Message });
+                    new ResponseManager { IsSuccess = false, Message = "Error interno del servidor.", Response = ex.Message });
             }
         }
         
@@ -166,13 +163,13 @@ namespace SrcProject.Controllers.Security
 
                     if (result.IsSuccess)
                         return StatusCode(StatusCodes.Status200OK,
-                             new
+                             new ResponseManager
                              {
-                                 issuccess = result.IsSuccess,
-                                 message = result.Message,
+                                 IsSuccess = result.IsSuccess,
+                                 Message = result.Message,
                              });
 
-                    return StatusCode(StatusCodes.Status200OK, new { IsSuccess = false, Result = result.Message });
+                    return StatusCode(StatusCodes.Status200OK, new ResponseManager { IsSuccess = false, Response = result.Message });
                 }
 
                 return BadRequest("Algunas propiedades no son válidas.");
@@ -180,7 +177,7 @@ namespace SrcProject.Controllers.Security
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                    new { IsSuccess = false, Message = "Error interno del servidor.", Result = ex.Message });
+                    new ResponseManager { IsSuccess = false, Message = "Error interno del servidor.", Response = ex.Message });
             }
         }
     }
