@@ -90,7 +90,8 @@ namespace SrcProject.Services.Implement.Security
                 return new ResponseManager
                 {
                     IsSuccess = false,
-                    Message = "El usuario no fue creado. " + result.Errors.ElementAtOrDefault(0).Code,
+                    Message = "El usuario no fue creado. ",
+                    Response = result.Errors.ElementAtOrDefault(0).Code
                 };
             }
             catch (Exception ex)
@@ -99,7 +100,8 @@ namespace SrcProject.Services.Implement.Security
                 return new ResponseManager
                 {
                     IsSuccess = false,
-                    Message = "Error en el método Register. " + ex.Message
+                    Message = "Error en el método Register. ",
+                    Response = ex.Message
                 };
             }
         }
@@ -134,7 +136,8 @@ namespace SrcProject.Services.Implement.Security
                 return new ResponseManager
                 {
                     IsSuccess = false,
-                    Message = "Error en el método Login. " + ex.Message
+                    Message = "Error en el método Login. ", 
+                    Response = ex.Message
                 };
             }
         }
@@ -193,7 +196,8 @@ namespace SrcProject.Services.Implement.Security
                 return new ResponseManager
                 {
                     IsSuccess = false,
-                    Message = "Error en el método LoginIdentity. " + ex.Message
+                    Message = "Error en el método LoginIdentity. ",
+                    Response = ex.Message
                 };
             }
         }
@@ -291,7 +295,8 @@ namespace SrcProject.Services.Implement.Security
                 return new ResponseManager
                 {
                     IsSuccess = false,
-                    Message = ex.Message
+                    Message = "Error en el método LoginIdentity. ",
+                    Response = ex.Message
                 };
             }
         }
@@ -321,7 +326,7 @@ namespace SrcProject.Services.Implement.Security
                 var encodedToken = Encoding.UTF8.GetBytes(token);
                 var validToken = WebEncoders.Base64UrlEncode(encodedToken);
 
-                string url = $"{_configuration["AppUrl"]}/auth/resetpassword?email={email}&token={validToken}";
+                string url = $"{_configuration["Frontend_Local_Url"]}/reset-password?email={email}&token={validToken}";
 
                 await _emailService.SendEmail(email, "Restablecer contraseña", $"<h2>Sistema de información</h2>" + 
                     "<h1>Siga las instrucciones para restablecer su contraseña.</h1>" + $"<p>Para restablecer su contraseña <a href='{url}'>clic aquí</a></p>");
@@ -338,7 +343,8 @@ namespace SrcProject.Services.Implement.Security
                 return new ResponseManager
                 {
                     IsSuccess = false,
-                    Message = ex.Message
+                    Message = "Error en el método ForgetPassword. ",
+                    Response = ex.Message
                 };
             }
         }
@@ -377,7 +383,8 @@ namespace SrcProject.Services.Implement.Security
                 return new ResponseManager
                 {
                     IsSuccess = false,
-                    Message = "No se pudo restablecer la contraseña. " + result.Errors.ElementAtOrDefault(0).Code,
+                    Message = "No se pudo restablecer la contraseña. ",
+                    Response = result.Errors.ElementAtOrDefault(0).Code
                 };
             }
             catch (Exception ex)
@@ -386,7 +393,8 @@ namespace SrcProject.Services.Implement.Security
                 return new ResponseManager
                 {
                     IsSuccess = false,
-                    Message = ex.Message
+                    Message = "Error en el método ResetPassword. ",
+                    Response = ex.Message
                 };
             }
         }
