@@ -43,7 +43,7 @@ namespace SrcProject.Controllers.Security
                         });
                     }
 
-                    return StatusCode(StatusCodes.Status200OK, new ResponseManager { IsSuccess = false, Response = result.Message });
+                    return StatusCode(StatusCodes.Status200OK, new ResponseManager { IsSuccess = false, Message = result.Message, Response=result.Response });
                 }
 
                 return BadRequest("Algunas propiedades no son válidas.");
@@ -78,13 +78,14 @@ namespace SrcProject.Controllers.Security
                       {
                           issuccess = result.IsSuccess,
                           message = result.Message,
+                          Response = result.Response,
                           token = token.Response.Token,
                           expireDate = token.Response.ExpireDate,
                           permissions = permissions.Response.Count > 0 ? permissions : null,
                           //image = responseImage
                       });
                     }
-                    return StatusCode(StatusCodes.Status200OK, new ResponseManager { IsSuccess = false, Message = result.Message });
+                    return StatusCode(StatusCodes.Status200OK, new ResponseManager { IsSuccess = false, Message = result.Message, Response = result.Response });
                 }
 
                 return BadRequest("Algunas propiedades no son válidas.");
@@ -111,10 +112,11 @@ namespace SrcProject.Controllers.Security
                          {
                              IsSuccess = result.IsSuccess,
                              Message = result.Message,
+                             Response = result.Response
                          });
                 }
 
-                return StatusCode(StatusCodes.Status200OK, new ResponseManager { IsSuccess = false, Message = result.Message });               
+                return StatusCode(StatusCodes.Status200OK, new ResponseManager { IsSuccess = false, Message = result.Message, Response = result.Response });               
             }
             catch (Exception ex)
             {
@@ -140,9 +142,10 @@ namespace SrcProject.Controllers.Security
                             {
                                 IsSuccess = result.IsSuccess,
                                 Message = result.Message,
+                                Response = result.Response
                             });
 
-                return StatusCode(StatusCodes.Status200OK, new ResponseManager { IsSuccess = false, Response = result.Message });
+                return StatusCode(StatusCodes.Status200OK, new ResponseManager { IsSuccess = false, Message=result.Message, Response = result.Response });
             }
             catch (Exception ex)
             {
@@ -167,9 +170,10 @@ namespace SrcProject.Controllers.Security
                              {
                                  IsSuccess = result.IsSuccess,
                                  Message = result.Message,
+                                 Response = result.Response
                              });
 
-                    return StatusCode(StatusCodes.Status200OK, new ResponseManager { IsSuccess = false, Response = result.Message });
+                    return StatusCode(StatusCodes.Status200OK, new ResponseManager { IsSuccess = false, Message= result.Message,  Response = result.Response });
                 }
 
                 return BadRequest("Algunas propiedades no son válidas.");

@@ -39,7 +39,8 @@ namespace SrcProject.Services.Implement.Security
                     return new ResponseManager
                     {
                         IsSuccess = false,
-                        Message = "Las contraseñas no coinciden."
+                        Message = "Las contraseñas no coinciden.",
+                        Response = null
                     };
                 }
 
@@ -61,7 +62,8 @@ namespace SrcProject.Services.Implement.Security
                     return new ResponseManager
                     {
                         IsSuccess = false,
-                        Message = "El usuario ya existe en la base de datos del sistema."
+                        Message = "El usuario ya existe en la base de datos del sistema.",
+                        Response = null
                     };
                 }
 
@@ -117,7 +119,7 @@ namespace SrcProject.Services.Implement.Security
                     return new ResponseManager
                     {
                         IsSuccess = true,
-                        Message = responseLoginIdentity.Message,
+                        Message = "Inicio de sesión Exitoso",
                         Response = responseLoginIdentity.Response,
                     };
                 }
@@ -126,7 +128,8 @@ namespace SrcProject.Services.Implement.Security
                     return new ResponseManager
                     {
                         IsSuccess = false,
-                        Message = responseLoginIdentity.Message
+                        Message = responseLoginIdentity.Message,
+                        Response = null
                     };
                 }
             }
@@ -163,6 +166,7 @@ namespace SrcProject.Services.Implement.Security
                         {
                             IsSuccess = false,
                             Message = "El usuario no ha confirmado el correo electrónico.",
+                            Response = null
                         };
 
                     var result = await _signInManager.PasswordSignInAsync(user.UserName, loginIM.strPassword,
@@ -187,7 +191,8 @@ namespace SrcProject.Services.Implement.Security
                 return new ResponseManager
                 {
                     IsSuccess = false,
-                    Message = "Datos de inicio de sesión incorrectos."
+                    Message = "Datos de inicio de sesión incorrectos.",
+                    Response = null
                 };
             }
             catch (Exception ex)
@@ -286,7 +291,8 @@ namespace SrcProject.Services.Implement.Security
                 return new ResponseManager
                 {
                     IsSuccess = true,
-                    Message = "Correo electrónico confirmado exitosamente!"                    
+                    Message = "Correo electrónico confirmado exitosamente!",
+                    Response = null
                 };
             }
             catch (Exception ex)
@@ -310,7 +316,8 @@ namespace SrcProject.Services.Implement.Security
                     return new ResponseManager
                     {
                         IsSuccess = false,
-                        Message = "No se encontró ningún usuario asociado a este correo electrónico."
+                        Message = "No se encontró ningún usuario asociado a este correo electrónico.",
+                        Response = null
                     };
 
                 var confirmedEmail = await _userManager.IsEmailConfirmedAsync(user);
@@ -319,7 +326,8 @@ namespace SrcProject.Services.Implement.Security
                     return new ResponseManager
                     {
                         IsSuccess = false,
-                        Message = "El correo electrónico no ha sido confirmado."
+                        Message = "El correo electrónico no ha sido confirmado.",
+                        Response = null
                     };
 
                 var token = await _userManager.GeneratePasswordResetTokenAsync(user);
@@ -334,7 +342,8 @@ namespace SrcProject.Services.Implement.Security
                 return new ResponseManager
                 {
                     IsSuccess = true,
-                    Message = "Se ha enviado un mensaje a su correo electrónico con las instrucciones para recuperar su contraseña!"
+                    Message = "Se ha enviado un mensaje a su correo electrónico con las instrucciones para recuperar su contraseña!",
+                    Response = null
                 };
             }
             catch (Exception ex)
@@ -358,14 +367,16 @@ namespace SrcProject.Services.Implement.Security
                     return new ResponseManager
                     {
                         IsSuccess = false,
-                        Message = "No se encontró ningún usuario asociado a este correo electrónico."
+                        Message = "No se encontró ningún usuario asociado a este correo electrónico.",
+                        Response = null
                     };
 
                 if (resetPasswordIM.NewPassword != resetPasswordIM.ConfirmPassword)
                     return new ResponseManager
                     {
                         IsSuccess = false,
-                        Message = "Las contraseñas no coinciden."
+                        Message = "Las contraseñas no coinciden.",
+                        Response = null
                     };
 
                 var decodedToken = WebEncoders.Base64UrlDecode(resetPasswordIM.Token);
@@ -377,7 +388,8 @@ namespace SrcProject.Services.Implement.Security
                     return new ResponseManager
                     {
                         IsSuccess = true,
-                        Message = "La contraseña ha sido restablecida exitosamente!"
+                        Message = "La contraseña ha sido restablecida exitosamente!",
+                        Response = null
                     };
 
                 return new ResponseManager
