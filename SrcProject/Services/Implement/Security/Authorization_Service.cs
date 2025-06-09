@@ -50,7 +50,7 @@ namespace SrcProject.Services.Implement.Security
             }
             catch (Exception ex)
             {
-                Utils.LogManager("Error en el método GetPartners " + ex.Message);
+                LogManager.DebugLog("Error en el método GetPartners " + ex.Message);
                 throw;
             }
         }
@@ -79,7 +79,7 @@ namespace SrcProject.Services.Implement.Security
             }
             catch (Exception ex)
             {
-                Utils.LogManager("Error en el método AddExternalUser " + ex.Message);
+                LogManager.DebugLog("Error en el método AddExternalUser " + ex.Message);
                 throw;
             }
         }
@@ -118,7 +118,7 @@ namespace SrcProject.Services.Implement.Security
             }
             catch (Exception ex)
             {
-                Utils.LogManager("Error en el método GetPermissionsByUser " + ex.Message);
+                LogManager.DebugLog("Error en el método GetPermissionsByUser " + ex.Message);
                 throw;
             }
         }
@@ -143,7 +143,7 @@ namespace SrcProject.Services.Implement.Security
             }
             catch (Exception ex)
             {
-                Utils.LogManager("Error en el método AddPermissionsByUser " + ex.Message);
+                LogManager.DebugLog("Error en el método AddPermissionsByUser " + ex.Message);
                 throw;
             }
         }
@@ -168,7 +168,7 @@ namespace SrcProject.Services.Implement.Security
             }
             catch (Exception ex)
             {
-                Utils.LogManager("Error en el método DeletePermissionsByUser " + ex.Message);
+                LogManager.DebugLog("Error en el método DeletePermissionsByUser " + ex.Message);
                 throw;
             }
         }
@@ -203,7 +203,7 @@ namespace SrcProject.Services.Implement.Security
             }
             catch (Exception ex)
             {
-                Utils.LogManager("Error en el método GetRoutes " + ex.Message);
+                LogManager.DebugLog("Error en el método GetRoutes " + ex.Message);
                 throw;
             }
         }
@@ -239,7 +239,7 @@ namespace SrcProject.Services.Implement.Security
             }
             catch (Exception ex)
             {
-                Utils.LogManager("Error en el método GetUser " + ex.Message);
+                LogManager.DebugLog("Error en el método GetUser " + ex.Message);
                 throw;
             }
         }

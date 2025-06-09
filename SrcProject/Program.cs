@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -52,8 +53,9 @@ builder.Services.AddIdentity<ApplicationUserIM, IdentityRole>(options =>
 
 // Inyección de dependencias
 builder.Services.AddScoped<IAuthentication_Service, Authentication_Service>();
-builder.Services.AddScoped<Utils>();
+builder.Services.AddScoped<Jwt>();
 builder.Services.AddScoped<IAuthorization_Service, Authorization_Service>();
+builder.Services.AddTransient<EmailService>();
 
 // Configuración de la Autenticación con JWT 
 JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
