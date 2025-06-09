@@ -1,6 +1,6 @@
-﻿namespace SrcProject.Utilities
+﻿namespace SrcProject.Models.OutModels
 {
-    public class ResponseManager
+    public class ResponseManagerOM
     {
         public bool IsSuccess { get; set; }
         public string Message { get; set; }
