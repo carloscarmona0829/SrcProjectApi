@@ -12,8 +12,8 @@ using SrcProject.Configuration;
 namespace SrcProject.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250602150044_Initial")]
-    partial class Initial
+    [Migration("20250614131232_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
