@@ -225,8 +225,8 @@ namespace SrcProject.Services.Implement.Security
                     {
                         while (await dr.ReadAsync())
                         {
-                            string strModule = dr["strModule"].ToString();
-                            string strSubModule = dr["strSubModule"].ToString();
+                            string strModule = dr["Module"].ToString();
+                            string strSubModule = dr["SubModule"].ToString();
 
                             var existingPermission = permisions.FirstOrDefault(p => p.strModule == strModule);
 

@@ -2,8 +2,26 @@
 {
     public class Utils
     {
-        public static async Task<ResponseManager> ChangeImage(IFormFile file, string filePath)
+        public static async Task<ResponseManager> ChangeImage(string fileName, string filePath, IFormFile file)
         {
+            if (fileName == null || string.IsNullOrEmpty(fileName))
+            {
+                return new ResponseManager
+                {
+                    IsSuccess = false,
+                    Message = "Nombre de la imagen no válido. ",
+                    Response = null
+                };
+            }
+            if (filePath == null || string.IsNullOrEmpty(filePath))
+            {
+                return new ResponseManager
+                {
+                    IsSuccess = false,
+                    Message = "Ruta de archivo no válida. ",
+                    Response = null
+                };
+            }
             if (file == null || file.Length == 0)
             {
                 return new ResponseManager
@@ -13,18 +31,7 @@
                     Response = null
                 };
             }
-
-            if(filePath == null || string.IsNullOrEmpty(filePath))
-            {
-                return new ResponseManager
-                {
-                    IsSuccess = false,
-                    Message = "Ruta de archivo no válida. ",
-                    Response = null
-                };
-            }
-
-            var fileName = "Logo.png";
+            
             var currentFilePath = Path.Combine(filePath, fileName);
             if (System.IO.File.Exists(currentFilePath))
             {
@@ -62,6 +69,6 @@
                 Message = "Imagen actualizada exitosamente.",
                 Response = null
             };
-        }       
+        }
     }
 }

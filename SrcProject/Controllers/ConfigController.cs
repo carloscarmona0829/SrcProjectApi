@@ -17,12 +17,12 @@ namespace SrcProject.Controllers
             _configuration = configuration;
         }
 
-        [HttpPost("ChangeLogo")]
-        public async Task<ActionResult> PostChangeLogo(IFormFile file)
-        {
+        [HttpPost("ChangeImage")]
+        public async Task<ActionResult> PostChangeLogo([FromForm] string fileName, IFormFile file)
+        {           
             try
             {
-                var response = await Utilities.Utils.ChangeImage(file, _configuration["FilePaths:Logo"]);
+                var response = await Utilities.Utils.ChangeImage(fileName, _configuration["FilePaths:ImagesFrontendPath"], file);
 
                 return StatusCode(StatusCodes.Status200OK,
                       new { IsSuccess = true, Message = response.IsSuccess == true ? "Imagen actualizada con éxito" : "No se pudo actualizar la imagen", Result = response });
