@@ -18,42 +18,7 @@ namespace SrcProject.Services.Implement.Security
         public Authorization_Service(IConfiguration configuration)
         {
             _configuration = configuration;
-        }
-
-        public async Task<List<object>> GetPartners()
-        {
-            List<object> lst = new List<object>();
-
-            try
-            {
-                using (var cnn = new SqlConnection(_configuration["ConnectionStrings:cnn"]))
-                {
-                    cnn.Open();
-                    string sqlQuery = "SELECT intPartnerId, strDescription FROM tbl_Pwa_Sec_Partners WHERE bitState = 1 ORDER BY intOrder ASC";
-                    SqlCommand cmd = new SqlCommand(sqlQuery, cnn);
-
-                    cmd.CommandType = CommandType.Text;
-
-                    using (var dr = await cmd.ExecuteReaderAsync())
-                    {
-                        while (await dr.ReadAsync())
-                        {
-                            lst.Add(new
-                            {
-                                intPartnerId = Convert.ToInt32(dr["intPartnerId"]),
-                                strDescription = dr["strDescription"].ToString()
-                            });
-                        }
-                    }
-                    return lst;
-                }
-            }
-            catch (Exception ex)
-            {
-                LogManager.DebugLog("Error en el método GetPartners " + ex.Message);
-                throw;
-            }
-        }
+        }       
 
         public async Task<bool> AddExternalUser(AddExternalUserIM addExternalUserIM)
         {
@@ -243,7 +208,6 @@ namespace SrcProject.Services.Implement.Security
                 throw;
             }
         }
-
     }
 }
 

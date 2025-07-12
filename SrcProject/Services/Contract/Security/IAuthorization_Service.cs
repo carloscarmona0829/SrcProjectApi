@@ -8,7 +8,6 @@ namespace SrcProject.Services.Contract.Security
     {
         Task<List<PermissionsByUserByRouteOM>> GetPermissionsByUser(PermissionsIM permissionsIM);
         Task<bool> AddExternalUser(AddExternalUserIM addExternalUserIM);
-        Task<List<object>> GetPartners();
         Task<bool> AddPermissionsByUser(PermissionsIM permissionsIM);
         Task<bool> DeletePermissionsByUser(PermissionsIM permissionsIM);
         Task<List<object>> GetRoutes();

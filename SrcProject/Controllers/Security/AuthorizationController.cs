@@ -19,24 +19,7 @@ namespace SrcProject.Controllers.Security
         public AuthorizationController(IAuthorization_Service AutorizationService)
         {
             _AuthorizationService = AutorizationService;
-        }
-
-        [HttpGet("GetPartners")]
-        [AllowAnonymous]
-        public async Task<ActionResult> GetPartners()
-        {
-            try
-            {
-                var response = await _AuthorizationService.GetPartners();
-
-                return StatusCode(StatusCodes.Status200OK,
-                      new { IsSuccess = true, Message = response?.Count > 0 ? "Consulta realizada con éxito" : "No se obtuvieron resultados.", Result = response });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { IsSuccess = false, Message = "Error interno del servidor.", Result = ex.Message });
-            }
-        }
+        }        
 
         [HttpPost("AddExternalUser")]
         [AllowAnonymous]
@@ -134,6 +117,5 @@ namespace SrcProject.Controllers.Security
                 return StatusCode(StatusCodes.Status500InternalServerError, new { IsSuccess = false, Message = "Error interno del servidor.", Result = ex.Message });
             }
         }
-
     }
 }
