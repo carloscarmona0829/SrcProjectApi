@@ -18,36 +18,7 @@ namespace SrcProject.Services.Implement.Security
         public Authorization_Service(IConfiguration configuration)
         {
             _configuration = configuration;
-        }       
-
-        public async Task<bool> AddExternalUser(AddExternalUserIM addExternalUserIM)
-        {
-            try
-            {
-                using (var cnn = new SqlConnection(_configuration["ConnectionStrings:cnn"]))
-                {
-                    cnn.Open();
-                    SqlCommand cmd = new SqlCommand("sp_Pwa_Sec_AddExternalUser", cnn);
-                    cmd.Parameters.AddWithValue("pDni", addExternalUserIM.strDni);
-                    cmd.Parameters.AddWithValue("pName", addExternalUserIM.strName);
-                    cmd.Parameters.AddWithValue("pLastName", addExternalUserIM.strLastName);
-                    cmd.Parameters.AddWithValue("pPhone", addExternalUserIM.strPhone);
-                    cmd.Parameters.AddWithValue("pEmail", addExternalUserIM.strEmail);
-                    cmd.Parameters.AddWithValue("pPartnerId", addExternalUserIM.intPartnerId);
-
-                    cmd.CommandType = CommandType.StoredProcedure;
-
-                    var dr = await cmd.ExecuteReaderAsync();
-
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                LogManager.DebugLog("Error en el método AddExternalUser " + ex.Message);
-                throw;
-            }
-        }
+        }              
 
         public async Task<List<PermissionsByUserByRouteOM>> GetPermissionsByUser(PermissionsIM permissionsIM)
         {

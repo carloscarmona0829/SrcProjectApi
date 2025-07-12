@@ -19,24 +19,7 @@ namespace SrcProject.Controllers.Security
         public AuthorizationController(IAuthorization_Service AutorizationService)
         {
             _AuthorizationService = AutorizationService;
-        }        
-
-        [HttpPost("AddExternalUser")]
-        [AllowAnonymous]
-        public async Task<ActionResult> AddExternalUser([FromBody] AddExternalUserIM addExternalUserIM)
-        {
-            try
-            {
-                var response = await _AuthorizationService.AddExternalUser(addExternalUserIM);
-
-                return StatusCode(StatusCodes.Status200OK,
-                          new { IsSuccess = true, Message = response ? "Usuario registrado con éxito" : "No se pudo realizar la operación.", Result = response });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { IsSuccess = false, Message = "Error interno del servidor.", Result = ex.Message });
-            }
-        }
+        }                
 
         [HttpPost("GetPermissionsByUser")]
         public async Task<ActionResult> GetPermissionsByUser([FromBody] PermissionsIM permissionsIM)
