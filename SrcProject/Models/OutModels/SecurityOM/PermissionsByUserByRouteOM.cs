@@ -2,10 +2,9 @@
 {
     public class PermissionsByUserByRouteOM
     {
-        public int intPermissionId { get; set; }
-        public string strName { get; set; }
-        public string strJobTitle { get; set; }
-        public string strUserName { get; set; }
-        public string strRoute { get; set; }
+        public int IdPermission { get; set; }
+        public string FullName { get; set; }
+        public string UserName { get; set; }
+        public string Permission { get; set; }
     }
 }
