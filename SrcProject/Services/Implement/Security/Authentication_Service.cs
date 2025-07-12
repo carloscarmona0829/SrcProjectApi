@@ -410,42 +410,5 @@ namespace SrcProject.Services.Implement.Security
                 };
             }
         }
-
-
-        //private async Task<LoginOM> GetExternalUserLogin(string userName, string password)
-        //{
-        //    try
-        //    {
-        //        var user = new LoginOM();
-
-        //        using (var cnn = new SqlConnection(_configuration["ConnectionStrings:cnn"]))
-        //        {
-        //            cnn.Open();
-        //            SqlCommand cmd = new SqlCommand("sp_Pwa_Sec_GetExternalUserLogin", cnn);
-        //            cmd.Parameters.AddWithValue("pEmail", userName);
-        //            cmd.Parameters.AddWithValue("pDni", password);
-
-        //            cmd.CommandType = CommandType.StoredProcedure;
-
-        //            using (var dr = await cmd.ExecuteReaderAsync())
-        //            {
-        //                while (await dr.ReadAsync())
-        //                {
-        //                    user.strDni = dr["strDni"].ToString();
-        //                    user.strName = dr["strName"].ToString();
-        //                    user.strLastName = dr["strLastName"].ToString();
-        //                    user.strEmail = dr["strEmail"].ToString();
-        //                }
-        //            }
-        //        }
-        //        return user;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        LogManager.DebugLog("Error en el método GetExternalUserLogin " + ex.Message);
-        //        throw;
-        //    }
-        //}
-
     }
 }
