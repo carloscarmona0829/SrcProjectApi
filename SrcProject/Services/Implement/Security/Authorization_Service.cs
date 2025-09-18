@@ -43,9 +43,9 @@ namespace SrcProject.Services.Implement.Security
                             lst.Add(new PermissionsByUserByRouteOM()
                             {
                                 IdPermission = Convert.ToInt32(dr["IdPermission"]),
-                                FullName = dr["FullName"].ToString(),
-                                UserName = dr["UserName"].ToString(),
-                                Permission = dr["Permission"].ToString()
+                                FullName = dr["FullName"].ToString() ?? string.Empty,
+                                UserName = dr["UserName"].ToString() ?? string.Empty,
+                                Permission = dr["Permission"].ToString() ?? string.Empty
                             });
                         }
                     }

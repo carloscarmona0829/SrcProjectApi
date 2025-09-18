@@ -6,6 +6,7 @@ using SrcProject.Models.OutModels.Security;
 using SrcProject.Services.Contract.Security;
 using SrcProject.Utilities;
 using System.Data;
+using System.Net;
 using System.Text;
 
 namespace SrcProject.Services.Implement.Security
@@ -49,7 +50,7 @@ namespace SrcProject.Services.Implement.Security
                     Dni = registerModelIM.Dni,
                     FirstName = registerModelIM.FirstName,
                     LastName = registerModelIM.LastName,
-                    BirthDay = registerModelIM.BirthDay,
+                    BirthDay = registerModelIM.BirthDay ?? string.Empty,
                     UserName = registerModelIM.Email.Substring(0, registerModelIM.Email.IndexOf('@')),
                     Email = registerModelIM.Email,
                     PhoneNumber = registerModelIM.PhoneNumber,
@@ -262,7 +263,7 @@ namespace SrcProject.Services.Implement.Security
                 throw;
             }
         }
-
+       
         public async Task<ResponseManager> ConfirmEmail(string userId, string token)
         {
             try

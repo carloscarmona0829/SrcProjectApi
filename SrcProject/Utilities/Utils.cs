@@ -2,6 +2,24 @@
 {
     public class Utils
     {
+        public static async Task<string> GetBase64Image(string route, string name)
+        {
+            /*Método para mostrar imagenes en general, recibe la ruta y el nombre de la imagen
+             Este método no tiene api sino que se usa como solicitud en NewsSercive.cs */
+
+            string imagePath = Path.Combine(route, name);
+
+            if (!File.Exists(imagePath))
+            {
+                return imagePath ?? string.Empty;
+            }
+
+            imagePath = imagePath ?? string.Empty;
+            var imageBytes = File.ReadAllBytes(imagePath);
+            var base64ImageString = Convert.ToBase64String(imageBytes);
+
+            return base64ImageString;
+        }
         public static async Task<ResponseManager> ChangeImage(string fileName, string filePath, IFormFile file)
         {
             if (fileName == null || string.IsNullOrEmpty(fileName))

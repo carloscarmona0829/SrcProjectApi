@@ -68,10 +68,10 @@ namespace SrcProject.Controllers.Security
 
                     if (result.IsSuccess)
                     {
-                        //var responseImage = _authService.GetBase64ImageString();
                         Jwt jwtGenerator = new Jwt(_configuration);
                         var token = await jwtGenerator.BuildToken(result.Response.UserType, result.Response.FirstName, result.Response.LastName, result.Response.Email);
                         var permissions = await _authService.GetPermissionsByUser(loginIM);
+                        var responseImage = await Utils.GetBase64Image(_configuration["FilePaths:EmployeesImages"] ?? string.Empty, "1017140829.jpg");
 
                         return StatusCode(StatusCodes.Status200OK,
                       new 
@@ -82,7 +82,7 @@ namespace SrcProject.Controllers.Security
                           token = token.Response.Token,
                           expireDate = token.Response.ExpireDate,
                           permissions = permissions.Response.Count > 0 ? permissions : null,
-                          //image = responseImage
+                          image = responseImage
                       });
                     }
                     return StatusCode(StatusCodes.Status200OK, new ResponseManager { IsSuccess = false, Message = result.Message, Response = result.Response });

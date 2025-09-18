@@ -25,7 +25,7 @@ namespace SrcProject.Utilities
                   new Claim("strUserType", strUserType)
             };
 
-                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWTSettings:JWTkey"]));
+                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWTSettings:JWTkey"] ?? string.Empty));
 
                 var token = new JwtSecurityToken(
                     issuer: _configuration["JWTSettings:Issuer"],
