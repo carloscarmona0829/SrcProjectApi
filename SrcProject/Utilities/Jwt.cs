@@ -13,12 +13,13 @@ namespace SrcProject.Utilities
         {
             _configuration = configuration;
         }
-        public async Task<ResponseManager> BuildToken(string strUserType, string strName, string strLastName, string strEmail)
+        public async Task<ResponseManager> BuildToken(string strUserType, string strDni, string strName, string strLastName, string strEmail)
         {
             try
             {
                 var claims = new List<Claim>()
             {
+                  new Claim("strDni", strDni),
                   new Claim("strEmail", strEmail),
                   new Claim("strName", strName),
                   new Claim("strLastName", strLastName),

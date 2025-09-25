@@ -1,7 +1,20 @@
-﻿namespace SrcProject.Utilities
+﻿using Microsoft.IdentityModel.Tokens;
+using QRCoder;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+
+namespace SrcProject.Utilities
 {
     public class Utils
     {
+        private readonly IConfiguration _configuration;
+
+        public Utils(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
         public static async Task<string> GetBase64Image(string route, string name)
         {
             /*Método para mostrar imagenes en general, recibe la ruta y el nombre de la imagen
@@ -49,7 +62,7 @@
                     Response = null
                 };
             }
-            
+
             var currentFilePath = Path.Combine(filePath, fileName);
             if (System.IO.File.Exists(currentFilePath))
             {
@@ -87,6 +100,53 @@
                 Message = "Imagen actualizada exitosamente.",
                 Response = null
             };
+        }
+        public async Task<ResponseManager> GetGenerateQr(string strUserId, string strUserName)
+        {
+             try
+            {
+                var claims = new List<Claim>()
+            {
+                  new Claim("strUserId", strUserId),
+                  new Claim("strUserName", strUserName),                  
+            };
+
+                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWTSettings:JWTkey"] ?? string.Empty));
+
+                var token = new JwtSecurityToken(
+                    issuer: _configuration["JWTSettings:Issuer"],
+                    audience: _configuration["JWTSettings:Audience"],
+                    claims: claims,
+                    expires: DateTime.Now.AddMinutes(Convert.ToInt32(_configuration["JWTSettings:ExpiresMinutesCard"])),
+                    signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256));
+
+                string tokenAsString = new JwtSecurityTokenHandler().WriteToken(token);
+
+                // 3. Generar la imagen del código QR a partir del token
+                var qrGenerator = new QRCodeGenerator();
+                var qrData = qrGenerator.CreateQrCode(tokenAsString, QRCodeGenerator.ECCLevel.Q);
+                var qrCode = new PngByteQRCode(qrData);
+
+                // 4. Convertir la imagen a un array de bytes para enviarla como respuesta
+                byte[] qrCodeImage = qrCode.GetGraphic(20);
+
+                return new ResponseManager
+                {
+                    IsSuccess = true,
+                    Message = "El código QR se generó exitosamente.",
+                    Response = qrCodeImage
+                };
+            }
+            catch (Exception ex)
+            {
+                LogManager.DebugLog("Error en la creación del código QR. " + ex.Message);
+                return new ResponseManager
+                {
+                    IsSuccess = false,
+                    Message = "Error en la creación del  QR. " + ex.Message
+                };
+            }
+           
         }
     }
 }

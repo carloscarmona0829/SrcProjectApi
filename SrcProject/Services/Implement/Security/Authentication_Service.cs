@@ -156,6 +156,7 @@ namespace SrcProject.Services.Implement.Security
 
                 if (user != null)
                 {
+                    string strDni = user.Dni;
                     string strName = user.FirstName;
                     string strLastName = user.LastName;
                     string strEmail = user.Email;
@@ -182,6 +183,7 @@ namespace SrcProject.Services.Implement.Security
                             Response = new
                             {
                                 UserType = "emp", 
+                                Dni = strDni,
                                 FirstName = strName,
                                 LastName = strLastName,
                                 Email = strEmail

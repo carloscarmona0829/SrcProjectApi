@@ -69,7 +69,7 @@ namespace SrcProject.Controllers.Security
                     if (result.IsSuccess)
                     {
                         Jwt jwtGenerator = new Jwt(_configuration);
-                        var token = await jwtGenerator.BuildToken(result.Response.UserType, result.Response.FirstName, result.Response.LastName, result.Response.Email);
+                        var token = await jwtGenerator.BuildToken(result.Response.UserType, result.Response.Dni, result.Response.FirstName, result.Response.LastName, result.Response.Email);
                         var permissions = await _authService.GetPermissionsByUser(loginIM);
                         var responseImage = await Utils.GetBase64Image(_configuration["FilePaths:EmployeesImages"] ?? string.Empty, "1017140829.jpg");
 
